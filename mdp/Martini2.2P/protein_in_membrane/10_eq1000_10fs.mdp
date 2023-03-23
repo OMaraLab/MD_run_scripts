@@ -1,3 +1,6 @@
+; part of a set of steps to run md with position restraints, and then with increasing timesteps
+; from ada's honours project, which used martini 2.2P and gromacs 2019.3 
+
 ;
 ; STANDARD MD INPUT OPTIONS FOR MARTINI 2.x
 ; Updated 15 Jul 2015 by DdJ
