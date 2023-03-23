@@ -26,6 +26,7 @@
 # For instance, there's no yellow, just a few disgustingly bright greens
 # I like these ones better
 # Commented ones are defaults
+# note from ada:  I often wonder who the exasperated person who wrote this message actually was
 
 color change rgb 0   0.16   0.33   0.62    ;# blue
 #color change rgb 1   1.0    0.0    0.0     ;# red
