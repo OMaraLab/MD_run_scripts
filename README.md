@@ -1,6 +1,10 @@
 # MD_run_scripts
 Standard scripts, MDP files and other documentation for running MD simulations
 
+## Useful stuff
+
+`useful_stuff` contains a guide to setting up a workstation, and broadly useful files like the group's `.vmdrc` file.
+
 ## MDP files
 
 MDP files for standard system setups will be stored in `.mdp`
@@ -23,12 +27,12 @@ For any gereric MD system, your production folder should look something like `Te
 
 If your production run is named GlyT2_apo_POPC_CHOL, you MUST have five things in your production folder
 
- * A submission script named `GlyT2_apo_POPC_CHOL`   **NB: NOT** `GlyT2_apo_POPC_CHOL.sh`
+ * A submission script named `GlyT2_apo_POPC_CHOL` (**NB:** not `GlyT2_apo_POPC_CHOL.sh`)
  * An mdp file named `GlyT2_apo_POPC_CHOL.mdp`
  * An index file named `GlyT2_apo_POPC_CHOL.ndx`
  * A topology file named `GlyT2_apo_POPC_CHOL.top`
- * Starting coordinates named `GlyT2_apo_POPC_CHOL_start.gro`  **NB:** Note the different filename
+ * Starting coordinates named `GlyT2_apo_POPC_CHOL_start.gro`  (**NB:** Note the different filename)
 
-You must also have a forcefield in the location referenced by your `.top` file.
+You must also have your forcefield folder and all .itp files in the locations referenced by your `.top` file.
 
 If any of these files are missing, our generic submission scripts will not function correctly.
