@@ -2,12 +2,17 @@
 
 # This is a script to run equilibritation on an md system, slowly relating the position restriction over a number of runs.
 
+# load intended gromacs version gromacs
+
+module unload gromacs
+module load gromacs/2021.4
+
 # EDIT THESE
 
-STARTFILE="/path/to/coordinates_EM2.gro"    # eg: "05_hOCT1_THII_p2_POPC_CLR_water_ions_EM2.gro"
-SYSNAME="sysname"                           # eg: "hOCT1_THII_p2_POPC_CLR"
+STARTFILE="path/to/coordinates_after_EM2.gro"    # eg: "05_hOCT1_THII_p2_POPC_CLR_water_ions_EM2.gro"
+SYSNAME="sysname"                                # eg: "hOCT1_THII_p2_POPC_CLR"
 
-# YOU SHOULD ADJUST YOUR STEP NUMBERS TO BE SEQUENTIAL FOLLOWING ON FROM STARTFILE
+# YOU SHOULD ADJUST YOUR STEP NUMBERS TO BE SEQUENTIAL FOLLOWING ON FROM $STARTFILE
 
 gmx grompp -f equil_memb_1000.mdp -c ${STARTFILE} -r ${STARTFILE} -n ${SYSNAME}.ndx -p ${SYSNAME}.top -o 06_${SYSNAME}_equil_1000.tpr  -maxwarn 2  2>&1 | tee 06_grompp.txt
 gmx mdrun -v -deffnm 06_${SYSNAME}_equil_1000
