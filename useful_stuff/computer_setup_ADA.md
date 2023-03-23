@@ -1,5 +1,7 @@
 # how ada set up her workstation
 
+Here are my successes and mistakes.  Maybe this will be useful to you when you set up your own workstation.
+
 ## gromacs 2022 came preinstalled
 
 check version with
@@ -11,7 +13,7 @@ gmx pdb2gmx --version
 
 ## install vmd
 
-go to https://www.ks.uiuc.edu/Research/vmd/alpha/ , downloaded `VMD 1.9.4a55 for RHEL 7+ Linux, 64-bit Intel x86 (x86_64), RTX RTRT`
+go to [https://www.ks.uiuc.edu/Research/vmd/alpha/](https://www.ks.uiuc.edu/Research/vmd/alpha/) , downloaded `VMD 1.9.4a55 for RHEL 7+ Linux, 64-bit Intel x86 (x86_64), RTX RTRT`
 
 navigate to download directory
 
@@ -29,16 +31,16 @@ if you have a `.vmdrc`file, put it in your home directory
 
 ## install slack
 
-go to https://slack.com/intl/en-au/downloads/linux and download an install .deb
+go to [https://slack.com/intl/en-au/downloads/linux](https://slack.com/intl/en-au/downloads/linux) and download an install .deb
 
 navidate to downloaded file using GUI
 double click to install
 
 ## install vscode
 
-go to https://code.visualstudio.com/download, download .deb file
+go to [https://code.visualstudio.com/download](https://code.visualstudio.com/download), download .deb file
 
-instructions are here: https://code.visualstudio.com/docs/setup/linux
+instructions are here: [https://code.visualstudio.com/docs/setup/linux](https://code.visualstudio.com/docs/setup/linux)
 
 using terminal, navigate to downloaded .deb file
 
@@ -87,9 +89,9 @@ VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=oderwat
 
 ## install zoom
 
-download the .deb from https://zoom.us/download?os=linux
+download the .deb from [https://zoom.us/download?os=linux](https://zoom.us/download?os=linux)
 
-navigate to file, run 
+navigate to file, run
 
 ~~~s
 sudo apt install ./zoom_downloaded_file_name.deb
@@ -97,13 +99,19 @@ sudo apt install ./zoom_downloaded_file_name.deb
 
 ## set up internal 2TB hard drive
 
+**GET HELPDESK TO DO THIS FOR YOU**, **IT'S VERY EASY TO MESS THIS UP AND RUIN EVERYTHING**
+
+This is what I did, but it sucks and you should do something better.
+
 guides I referenced:  
 
- * https://help.ubuntu.com/community/InstallingANewHardDrive
- * https://help.ubuntu.com/community/Fstab#Editing_fstab
- * https://help.ubuntu.com/community/UsingUUID
+* [https://help.ubuntu.com/community/InstallingANewHardDrive](https://help.ubuntu.com/community/InstallingANewHardDrive)
+* [https://help.ubuntu.com/community/Fstab#Editing_fstab](https://help.ubuntu.com/community/Fstab#Editing_fstab)
+* [https://help.ubuntu.com/community/UsingUUID](https://help.ubuntu.com/community/UsingUUID)
 
-### first need to format the drive. 
+### first need to format the drive
+
+**AGAIN, DON'T DO IT THIS WAY UNLESS YOU *REALLY* KNOW WHAT YOU'RE DOING**
 
 Install partition manager
 
@@ -115,7 +123,7 @@ use partition manager to format the internal drive.  Default file format was ntf
 
 THIS WILL WIPE THE DRIVE!  MAKE SURE YOU ARE WIPING THE DRIVE YOU INTENDED!
 
-launch the partition manager gui with 
+launch the partition manager gui with
 
 ~~~s
 sudo gparted
@@ -133,6 +141,8 @@ Double check everything is correct, then once you aresatisfied click the big gre
 once the new partition is ready, exit gparted
 
 ### permanently mount the drive to `/store`
+
+**AGAIN, DON'T DO IT THIS WAY UNLESS YOU *REALLY* KNOW WHAT YOU'RE DOING**
 
 make a mount directory
 
@@ -152,7 +162,7 @@ mine was
 /dev/sda2: UUID="221ae19f-4e10-4c80-98f3-42f30bfad182" SEC_TYPE="ext2" TYPE="ext3" PARTLABEL="Basic data partition" PARTUUID="92a540e3-79cd-4f4e-a175-4263104c34ef"
 ~~~
 
-add the drive to your fstab 
+add the drive to your fstab
 
 ~~~s
 sudo nano /etc/fstab
@@ -166,11 +176,13 @@ UUID=221ae19f-4e10-4c80-98f3-42f30bfad182 /store          ext3    defaults      
 
 reboot to check it worked
 
-# install conda
+## install conda
 
-instructions:  https://docs.anaconda.com/anaconda/install/linux/
+**OK** **SO WE'RE BACK TO THINGS YOU SHOULD DO**
 
-go here, download installer script : https://www.anaconda.com/products/distribution#linux
+instructions:  [https://docs.anaconda.com/anaconda/install/linux/](https://docs.anaconda.com/anaconda/install/linux/)
+
+go here, download installer script : [https://www.anaconda.com/products/distribution#linux](https://www.anaconda.com/products/distribution#linux)
 
 check installer script
 
@@ -184,7 +196,7 @@ run installer
 bash ./Anaconda3-2022.05-Linux-x86_64.sh 
 ~~~
 
-you might need to add conda to your path, and then run `conda init yourshell` 
+you might need to add conda to your path, and then run `conda init yourshell`
 
 use gui to set up environments
 
@@ -194,7 +206,7 @@ anaconda-navigator
 
 you'll need to add conda forge to the channels
 
-https://ostechnix.com/enable-conda-forge-channel-for-conda-package-manager/
+[https://ostechnix.com/enable-conda-forge-channel-for-conda-package-manager/](https://ostechnix.com/enable-conda-forge-channel-for-conda-package-manager/)
 
 click channels, add `https://conda.anaconda.org/conda-forge/` save, click update index
 
@@ -227,7 +239,7 @@ pip install --upgrade MDAnalysisTests
 
 with the correct conda environment open
 
-ref: https://pymolwiki.org/index.php/Linux_Install
+ref: [https://pymolwiki.org/index.php/Linux_Install](https://pymolwiki.org/index.php/Linux_Install)
 
 ~~~s
 sudo apt-get install pymol
@@ -258,7 +270,7 @@ make a .ssh/config file
 touch ~/.ssh/config
 ~~~
 
-mine looks like this
+mine looks like this; I should probably add an example later
 
 ~~~s
 Host *
@@ -277,7 +289,9 @@ Host setonix
     ForwardAgent yes
 ~~~
 
-generate an ssh key
+### generate an ssh key
+
+You can generate an ssh key to enable passwordless login to other computers.  **DO NOT DO THIS UNTIL YOU UNDERSTAND HOW SSH KEYS WORK**, otherwise you're basically just unlocking all your doors, turning off all your security, and inviting the nice fellow from the password inspector's office to steal everything you've ever done.
 
 ~~~s
 cd ~/.ssh/
@@ -299,14 +313,13 @@ alias gadi="ssh aq8103@gadi"  # i think this is right for bash, you might have t
 alias setonix="ssh ada@setonix"
 ~~~
 
-this should allow you to connect to either supercomputer by running `gadi` or `setonix` from the command line 
+this should allow you to connect to either supercomputer by running `gadi` or `setonix` from the command line
 
 ## autodock vina
 
+[download vina](https://vina.scripps.edu/)
 
-(download vina) [https://vina.scripps.edu/]
-
-extract vina to /packages/vina
+extract vina to `/packages/vina`
 
 symlink into usr/local/bin to add binaries to system path:
 
@@ -316,7 +329,7 @@ sudo ln -s /packages/vina/bin/vina_split vina_split
 sudo ln -s /packages/vina/bin/vina vina
 ~~~
 
-(download mgltools) [https://ccsb.scripps.edu/mgltools/downloads/]
+[download mgltools](https://ccsb.scripps.edu/mgltools/downloads/)
 
 change to download directory
 
@@ -334,11 +347,11 @@ sudo ln -s /packages/mgltools/bin/vision vision
 sudo ln -s /packages/mgltools/bin/pythonsh pythonsh
 ~~~
 
-# alternate gromacs
+## install alternate gromacs version
 
 If you want/need multiple versions of gromacs, I suggest you use module manager
 
-https://modules.readthedocs.io/en/latest/module.html
+[https://modules.readthedocs.io/en/latest/module.html](https://modules.readthedocs.io/en/latest/module.html)
 
 I needed to install my own gromacs because the version that came with this computer seems to have some problems with numberical instability; I wonder if it was installed through apt-get instead of compiled here
 
@@ -430,4 +443,4 @@ used a similar process to build gmx 5.1.5 for some old libraries, comake command
 cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=OFF -DCMAKE_INSTALL_PREFIX=/packages/gromacs/5.1.5/ -DREGRESSIONTEST_PATH=/home/uqadaqu1/Downloads/regressiontests-5.1.5/ -DGMX_GPU=off
 ~~~
 
-I'm not sure to what degree this version actually works; it's not very compatible with my current system, but hopefully it has functional libraries for the programs that will use it. 
+I'm not sure to what degree this version actually works; it's not very compatible with my current system, but hopefully it has functional libraries for the programs that will use it.
