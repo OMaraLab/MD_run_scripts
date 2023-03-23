@@ -1,18 +1,17 @@
 #!/bin/bash
-#PBS -P bd36
-#PBS -q gpuvolta
-#PBS -l walltime=04:00:00
-#PBS -l mem=32GB
+#PBS -P q95
+#PBS -q normal
+#PBS -l walltime=10:00:00
+#PBS -l mem=380GB
 #PBS -l jobfs=16000MB
-#PBS -l ngpus=2
-#PBS -l ncpus=24
+#PBS -l ncpus=96
 #PBS -l other=mpi:hyperthread
 #PBS -l wd
 #PBS -r y
 
 ## General-purpose resubmit script for GROMACS jobs on Wiener
 
-## this runs jobs in four hour blocks with checkpinting and resubmission, 
+## this runs jobs in ten hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
 ## nsteps is set in the mdp
 ## Starting structure, .top, .ndx and .mdp should have the same name as the
@@ -43,7 +42,7 @@ errexit ()
 }
 
 # Guarantee GPUs are visible
-export CUDA_VISIBLE_DEVICES=$(seq 0 $(( $PBS_NGPUS-1 )) | tr  '\r\n' ',')
+# export CUDA_VISIBLE_DEVICES=$(seq 0 $(( $PBS_NGPUS-1 )) | tr  '\r\n' ',')
 
 # Change to working directory - not necessary with #PBS -l wd
 cd $PBS_O_WORKDIR
@@ -58,13 +57,15 @@ fi
 
 # Load the gromacs module
 
-module load gromacs/2021.4-gpuvolta
+module load gromacs/2021.4
 
 # Let GROMACS choose how to parallelise everything, unless we specify something later:
 unset OMP_NUM_THREADS
 
 GMX='gmx'
-GMXMDRUN='gmx mdrun -maxh 3.95 -nb gpu'
+# GMXMDRUN='gmx mdrun -maxh 9.95'
+GMXMDRUN='mpirun gmx mdrun -maxh 9.95'
+
 
 
 ## GROMPP if there's no TPR file (eg, this is the first submission)
@@ -73,7 +74,7 @@ if [ ! -f ${PBS_JOBNAME}.tpr ]; then
 fi
 
 ## run MD!
- $GMXMDRUN -v -deffnm ${PBS_JOBNAME} -cpi ${PBS_JOBNAME}.cpt || errexit
+$GMXMDRUN -v -deffnm ${PBS_JOBNAME} -cpi ${PBS_JOBNAME}.cpt || errexit
  # Notes:
  # -cpi: Continue from checkpoint if available, otherwise start new simulation
 # -maxh n: Write a checkpoint and terminate after 0.99 * n hours

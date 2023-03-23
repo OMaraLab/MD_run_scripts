@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -P bd36
+#PBS -P q95
 #PBS -q gpuvolta
 #PBS -l walltime=04:00:00
 #PBS -l mem=32GB
