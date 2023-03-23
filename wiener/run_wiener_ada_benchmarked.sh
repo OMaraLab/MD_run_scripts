@@ -21,6 +21,7 @@
 ## Eg:  if script name is GlyT2_POPC_CHOL_r1, mdp is GlyT2_POPC_CHOL_r1.mdp
 
 
+#####  SETUP ENVIRONMENT  #####
 
 # Define error function so we can see the error code given when something
 # important crashes
@@ -53,14 +54,18 @@ export MV2_ENABLE_AFFINITY=0
 GMX='mpirun -n 1 gmx_mpi'
 GMXMDRUN='mpirun -n 4 gmx_mpi mdrun -maxh 3.95 -nb gpu'
 
+#####  START MD WITH A GROMPP  #####
+
 ## GROMPP if there's no TPR file (eg, this is the first submission)
 if [ ! -f ${SLURM_JOB_NAME}.tpr ]; then
     $GMX grompp -f ${SLURM_JOB_NAME}.mdp -c ${SLURM_JOB_NAME}_start.gro -o ${SLURM_JOB_NAME}.tpr -p ${SLURM_JOB_NAME}.top  -n ${SLURM_JOB_NAME}.ndx -maxwarn 1 &> ${SLURM_JOB_NAME}_grompp_${SLURM_JOB_ID}.txt
 fi
 
-#run MD
+#####  RUN MD FOR 3.95 HOURS  #####
 
 $GMXMDRUN -v -deffnm ${SLURM_JOB_NAME} -cpi ${SLURM_JOB_NAME}.cpt || errexit
+
+#####  CHECK IF JOB IS DONE; IF NOT DONE RESUBMIT THIS SCRIPT  #####
 
 # Check the log file for the number of steps completed
 steps_done=`perl -n -e'/Statistics over (\d+) steps using (\d+) frames/ && print $1' ${SLURM_JOB_NAME}.log`
@@ -73,3 +78,4 @@ if (( steps_done < steps_wanted )); then
     sbatch ${SLURM_JOB_NAME}.sh
 fi
 
+#####  END  #####
