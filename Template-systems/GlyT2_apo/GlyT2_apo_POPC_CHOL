@@ -10,6 +10,11 @@
 #PBS -l wd
 #PBS -r y
 
+## THIS IS AN EXAMPLE SCRIPT CHOSEN FROM A REAL PRODUCTION RUN
+## DO NOT BLINDLY ASSUME THIS SCRIPT WILL BE APPROPRIATE FOR YOUR JOB
+## CHOOSE A SCRIPT APPROPAITE FOR YOUR SYSTEM, YOUR COMPUTER, AND YOUR SOFTWARE ENVIRONMENT
+
+
 ## General-purpose resubmit script for GROMACS jobs on Gadi
 ## Don't assign a title:
 ## We assume that the title variable refers to the name of
