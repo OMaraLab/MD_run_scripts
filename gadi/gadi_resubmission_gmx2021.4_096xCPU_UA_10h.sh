@@ -64,7 +64,8 @@ unset OMP_NUM_THREADS
 
 GMX='gmx'
 # GMXMDRUN='gmx mdrun -maxh 9.95'
-GMXMDRUN='mpirun gmx mdrun -maxh 9.95'
+GMXMDRUN='gmx mdrun -maxh 9.95 -ntmpi 8 -ntomp -12'
+#GMXMDRUN='mpirun gmx mdrun -maxh 9.95'
 
 
 
