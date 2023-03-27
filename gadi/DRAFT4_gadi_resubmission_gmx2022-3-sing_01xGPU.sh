@@ -13,7 +13,7 @@
 # THIS WAS ADA TEST 01       
 # GOAL:  SEE IF IT WORKS
 
-## General-purpose resubmit script for GROMACS jobs on Bunya
+## General-purpose resubmit script for GROMACS jobs on Gadi usiong singularity containers
 
 ## this runs jobs in four hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
@@ -29,14 +29,14 @@
 ##
 ## IMPORTANT:  YOU NEED TO HAVE ACCESS TO A GROMACS SINGULARITY CONTAINER.  
 
- 
+
 # Load module, always specify version number.
 module load singularity
- 
+
 # Must include `#PBS -l storage=scratch/ab12+gdata/yz98` if the job
 # needs access to `/scratch/ab12/` and `/g/data/yz98/`. Details on:
 # https://opus.nci.org.au/display/Help/PBS+Directives+Explained
- 
+
 
 #####  SETUP ENVIRONMENT  #####
 
@@ -55,9 +55,11 @@ errexit ()
     fi
 }
 
-set OMP_NUM_THREADS=12
-export SINGULARITY_TMPDIR=/scratch/bd23/aq8103/tmp/ 
+export OMP_NUM_THREADS=12
+# this should be number of cpu cores
 
+export SINGULARITY_TMPDIR=/scratch/bd23/aq8103/tmp/ 
+# this should be your own temp directory
 
 
 GMX='singularity run --nv /g/data/q95/SHARED/gromacs_2022.3.sif gmx'
@@ -70,7 +72,7 @@ if [ ! -f ${PBS_JOBNAME}.tpr ]; then
     $GMX grompp -f ${PBS_JOBNAME}.mdp -c ${PBS_JOBNAME}_start.gro -o ${PBS_JOBNAME}.tpr -p ${PBS_JOBNAME}.top  -n ${PBS_JOBNAME}.ndx -maxwarn 2 &> ${PBS_JOBNAME}_grompp_${PBS_JOBID}.txt
 fi
 
-#####  RUN MD FOR 9.95 HOURS  #####
+#####  RUN MD FOR 3.95 HOURS  #####
 
 $GMXMDRUN -v -deffnm ${PBS_JOBNAME} -cpi ${PBS_JOBNAME}.cpt || errexit
 

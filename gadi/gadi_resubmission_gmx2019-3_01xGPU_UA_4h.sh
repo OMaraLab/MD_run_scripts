@@ -1,0 +1,139 @@
+#!/bin/bash
+#PBS -P q95
+#PBS -q gpuvolta
+#PBS -l walltime=04:00:00
+#PBS -l mem=32GB
+#PBS -l jobfs=16000MB
+#PBS -l ngpus=1
+#PBS -l ncpus=12
+#PBS -l other=mpi:hyperthread
+#PBS -l wd
+#PBS -r y
+
+## General-purpose resubmit script for GROMACS jobs on Gadi
+## Don't assign a title:
+## We assume that the title variable refers to the name of
+## the script for resubmission
+
+## Jobs will be split up automatically by mdrun to fill the time.
+## nsteps is set in the mdp
+## Starting structure and .mdp should have the same name as the
+## script, and all be in the same folder. Output will also have 
+## the same name.
+
+## The script automatically chooses the multithreading 
+## mode based on the number of CPUs it finds. 
+
+
+# Define error function so we can see the error code given when something
+# important crashes
+errexit ()
+{
+    errstat=$?
+    if [ $errstat != 0 ]; then
+        # A brief nap so PBS kills us in normal termination
+        # Prefer to be killed by PBS if PBS detected some resource
+        # excess
+        sleep 5
+        echo "Job returned error status $errstat - stopping job sequence $PBS_JOBNAME at job $PBS_JOBID"
+        exit $errstat
+    fi
+}
+
+# Guarantee GPUs are visible
+export CUDA_VISIBLE_DEVICES=$(seq 0 $(( $PBS_NGPUS-1 )) | tr  '\r\n' ',')
+
+# Change to working directory - not necessary with #PBS -l wd
+cd $PBS_O_WORKDIR
+
+# Terminate the job sequence if the file STOP_SEQUENCE is found in pwd
+if [ -f STOP_SEQUENCE ]; then
+    echo "STOP_SEQUENCE file found - terminating job sequence $PBS_JOBNAME at job $PBS_JOBID"
+    exit 0
+fi
+
+####  GROMACS time!  ####
+
+# Load the gromacs module
+#source /scratch/q95/SHARED/gromacs-2019.4/bin/GMXRC
+
+module load gromacs/2019.3-gpuvolta
+
+# gromacs module includes openmpi
+
+# Let GROMACS choose how to parallelise everything, unless we specify something later:
+unset OMP_NUM_THREADS
+
+mdrun_command='gmx mdrun'
+## Define our mdrun command
+# First, are we running on a single node? Dictates whether we use real MPI or thread-MPI
+#if (( $PBS_NGPUS <= 8 )); then
+#    ## Running on only 1 node (<= 8 GPU/24-28 CPU) - use thread MPI:
+#    mdrun_command="gmx mdrun"
+#    # GROMACS always detects the full node, even when we've only asked for a subset of it
+#    # So we need to tell GROMACS exactly what's up
+#    #  we are on a 48-core node?
+    if [ `nproc --all` -eq 96 ]; then
+#        # We're on a NCPUS-core node
+        export OMP_NUM_THREADS=24
+        num_cores=$PBS_NCPUS
+#    else
+#    fi
+#    # Hyperthreading means we should have 2 threads per core
+    num_threads=`echo "$num_cores * 2" | bc`
+    # Number of ranks is easily calculated
+    num_ranks=`echo "$num_threads / $OMP_NUM_THREADS" | bc `
+    # Put it all together
+    mdrun_command="$mdrun_command -ntmpi 1 -ntomp 24"
+else
+    echo "NOT IMPLEMENTED"
+    errexit
+#    ## Running on multiple nodes (> 8GPU/24-28 CPU) - use real MPI:
+#    # This hasn't been optimised by hand, but may not have the same problems as above since
+#    # each gmx_mpi instance runs on a full node
+#    mdrun_command='mpirun gmx_mpi mdrun'
+fi
+
+
+## GROMPP if there's no TPR file (eg, this is the first submission)
+if [ ! -f ${PBS_JOBNAME}.tpr ]; then
+    gmx grompp -f ${PBS_JOBNAME}.mdp -c ${PBS_JOBNAME}_start.gro -o ${PBS_JOBNAME}.tpr -p ${PBS_JOBNAME}.top  -n ${PBS_JOBNAME}.ndx -maxwarn 1 || errexit
+fi
+
+## Figure out how much time we have left
+# Ensures we stay in time if job is restarted, or if we decide to add some
+# expensive preamble to the script (like tune_pme or something)
+# also means that changing the PBS job time sets mdrun's time limit automatically
+qstat_out="`qstat -f $PBS_JOBID`"
+
+PBS_WALLTIME=`echo "$qstat_out" | sed -rn 's/.*Resource_List.walltime = (.*)/\1/p'`
+IFS=: read h m s <<<"${PBS_WALLTIME%.*}"
+seconds_total=$((10#$s+10#$m*60+10#$h*3600))
+
+walltime_used=`echo "$qstat_out" | sed -rn 's/.*resources_used.walltime = (.*)/\1/p'`
+IFS=: read h m s <<<"${walltime_used%.*}"
+seconds_used=$((10#$s+10#$m*60+10#$h*3600))
+
+hours_remaining=`echo "scale=4; ($seconds_total - $seconds_used) / 3600" | bc -l`
+
+# Set mdrun's maximum hours so that it ends 0.05 hours (3 minutes) before walltime runs out,
+# rather than 0.99 * as many hours
+maxh=`echo "scale=4; ($hours_remaining - 0.05) / 0.95" | bc -l`
+
+## run MD!
+ $mdrun_command -v -deffnm ${PBS_JOBNAME} -cpi ${PBS_JOBNAME}.cpt -maxh 3.90 -nb gpu || errexit
+ # Notes:
+ # -cpi: Continue from checkpoint if available, otherwise start new simulation
+# -maxh n: Write a checkpoint and terminate after 0.99 * n hours
+# -nb gpu: Die if GPU not usable (unfortunately, won't die if GPU isn't found)
+
+# Check the log file for the number of steps completed
+steps_done=`perl -n -e'/Statistics over (\d+) steps using (\d+) frames/ && print $1' ${PBS_JOBNAME}.log`
+# Check the mdp file for the number of steps we want
+steps_wanted=`perl -n -e'/nsteps\s*=\s*(\d+)/ && print $1' ${PBS_JOBNAME}.mdp`
+# Resubmit if we need to
+if (( steps_done < steps_wanted )); then
+    echo "Job ${PBS_JOBID} terminated with ${steps_done}/${steps_wanted} steps finished."
+    echo "Submitting next job in sequence $PBS_JOBNAME."
+    qsub $PBS_JOBNAME
+fi
