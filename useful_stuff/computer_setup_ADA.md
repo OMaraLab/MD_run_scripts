@@ -444,3 +444,13 @@ cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=OFF -DCMAKE_INSTALL_P
 ~~~
 
 I'm not sure to what degree this version actually works; it's not very compatible with my current system, but hopefully it has functional libraries for the programs that will use it.
+
+## Install chimera X
+
+Download  Ubuntu 20.04 version from [chimera x website](https://www.cgl.ucsf.edu/chimerax/download.html)
+
+Filename is `ucsf-chimerax_1.5ubuntu20.04_amd64.deb`
+
+~~~s
+sudo apt install ~/Downloads/ucsf-chimerax_1.5ubuntu20.04_amd64.deb
+~~~
