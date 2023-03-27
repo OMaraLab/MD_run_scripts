@@ -67,8 +67,6 @@ GMX='gmx'
 GMXMDRUN='gmx mdrun -maxh 9.95 -ntmpi 8 -ntomp -12'
 #GMXMDRUN='mpirun gmx mdrun -maxh 9.95'
 
-
-
 ## GROMPP if there's no TPR file (eg, this is the first submission)
 if [ ! -f ${PBS_JOBNAME}.tpr ]; then
     $GMX grompp -f ${PBS_JOBNAME}.mdp -c ${PBS_JOBNAME}_start.gro -o ${PBS_JOBNAME}.tpr -p ${PBS_JOBNAME}.top  -n ${PBS_JOBNAME}.ndx -maxwarn 2 || errexit
