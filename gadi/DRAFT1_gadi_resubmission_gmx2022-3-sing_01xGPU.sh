@@ -9,7 +9,7 @@
 #PBS -l other=mpi:hyperthread
 #PBS -l wd
 #PBS -r y
-#PBS -l storage=scratch/bd36+gdata/q95`
+#PBS -l storage=scratch/bd36+gdata/q95
 # THIS WAS ADA TEST 01       
 # GOAL:  SEE IF IT WORKS
 
@@ -38,7 +38,6 @@ module load singularity
 # https://opus.nci.org.au/display/Help/PBS+Directives+Explained
  
 # Run program
-singularity exec mycontainer.sif /path/to/my/program
 
 #####  SETUP ENVIRONMENT  #####
 
