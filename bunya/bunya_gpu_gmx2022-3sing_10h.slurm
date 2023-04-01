@@ -90,4 +90,8 @@ if (( steps_done < steps_wanted )); then
     sbatch ${SLURM_JOB_NAME}
 fi
 
+## clean up linebreaks in output file
+
+sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
+
 #####  END  #####

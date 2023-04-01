@@ -1,16 +1,14 @@
 #!/bin/bash
 
-#SBATCH -N 1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=28
-#SBATCH --mem=20000
-#SBATCH --partition=gpu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=48
 #SBATCH --time=4:00:00
-#SBATCH --gres=gpu:tesla:2
+#SBATCH --partition=general
+#SBATCH --account=a_omara
 
 
-
-## General-purpose resubmit script for GROMACS jobs on Wiener
+## General-purpose resubmit script for GROMACS jobs on Bunya
 
 ## this runs jobs in four hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
@@ -19,13 +17,25 @@
 ## script, and all be in the same folder. Output will also have 
 ## the same name.
 ## Eg:  if script name is GlyT2_POPC_CHOL_r1, mdp is GlyT2_POPC_CHOL_r1.mdp
+##
+## IMPORTANT: SCRIPT NAME SHOULD NOT END WITH .sh
+##
+## IMPORTANT: If SCRIPTNAME.mdp does not exist, automatic resubmission will fail
+##
+## IMPORTANT:  YOU NEED TO HAVE ACCESS TO A GROMACS SINGULARITY CONTAINER.  
+##             WE DON'T HAVE ONE IN A SHARED PLACE YET, HOPEFULLY SOON
+##             ASK ME OR HEATHER FOR A COPY, AND EDIT THE PATH IN THE 
+##             various lines that reference singularity (lines 56, 60, 61 or 66)
 
 
 #####  SETUP ENVIRONMENT  #####
 
+module load singularity
+
 # Define error function so we can see the error code given when something
 # important crashes
 errexit ()
+
 {
     errstat=$?
     if [ $errstat != 0 ]; then
@@ -37,35 +47,31 @@ errexit ()
     fi
 }
 
-module purge
 
-module load gnu7/7.3.0
-module load cuda/9.1.85.3
-module load mvapich2/2.2
-module load gromacs/2021.1
+export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 
 
-module list
+GMX='singularity run  /scratch/user/uqadaqu1/containers/gromacs_2021.4_CPU.sif gmx'
+GMXMDRUN='singularity run /scratch/user/uqadaqu1/containers/gromacs_2021.4_CPU.sif gmx mdrun -ntmpi 8 -ntomp 6 -pin on -pme cpu -dlb yes -maxh 3.95'
 
-export OMP_NUM_THREADS=7
-export MV2_ENABLE_AFFINITY=0
+### Alternate GMXMDRUN command that does nb calcs on the GPU
+### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 
 
-
-GMX='mpirun -n 1 gmx_mpi'
-GMXMDRUN='mpirun -n 4 gmx_mpi mdrun -maxh 3.95 -nb gpu'
+# GMXMDRUN='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -nb gpu -dlb yes -maxh 9.95'
 
 #####  START MD WITH A GROMPP  #####
 
 ## GROMPP if there's no TPR file (eg, this is the first submission)
 if [ ! -f ${SLURM_JOB_NAME}.tpr ]; then
-    $GMX grompp -f ${SLURM_JOB_NAME}.mdp -c ${SLURM_JOB_NAME}_start.gro -o ${SLURM_JOB_NAME}.tpr -p ${SLURM_JOB_NAME}.top  -n ${SLURM_JOB_NAME}.ndx -maxwarn 1 &> ${SLURM_JOB_NAME}_grompp_${SLURM_JOB_ID}.txt
+    $GMX grompp -f ${SLURM_JOB_NAME}.mdp -c ${SLURM_JOB_NAME}_start.gro -o ${SLURM_JOB_NAME}.tpr -p ${SLURM_JOB_NAME}.top  -n ${SLURM_JOB_NAME}.ndx -maxwarn 2 &> ${SLURM_JOB_NAME}_grompp_${SLURM_JOB_ID}.txt
 fi
 
-#####  RUN MD FOR 3.95 HOURS  #####
+#####  RUN MD FOR 9.95 HOURS  #####
 
 $GMXMDRUN -v -deffnm ${SLURM_JOB_NAME} -cpi ${SLURM_JOB_NAME}.cpt || errexit
 
 #####  CHECK IF JOB IS DONE; IF NOT DONE RESUBMIT THIS SCRIPT  #####
+
 
 # Check the log file for the number of steps completed
 steps_done=`perl -n -e'/Statistics over (\d+) steps using (\d+) frames/ && print $1' ${SLURM_JOB_NAME}.log`
@@ -75,7 +81,11 @@ steps_wanted=`perl -n -e'/nsteps\s*=\s*(\d+)/ && print $1' ${SLURM_JOB_NAME}.mdp
 if (( steps_done < steps_wanted )); then
     echo "Job ${SLURM_JOB_NAME} terminated with ${SLURM_JOB_NAME}/${SLURM_JOB_NAME} steps finished." 
     echo "Submitting next job in sequence ${SLURM_JOB_NAME}."
-    sbatch ${SLURM_JOB_NAME}.sh
+    sbatch ${SLURM_JOB_NAME}
 fi
+
+## clean up linebreaks in output file
+
+sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
 
 #####  END  #####
