@@ -1,0 +1,9 @@
+Input files:
+
+    /Users/ada/hOCT1/221116_OCT1_for_OMara/apo/hOCT1_coot-18_fit_apoflipP51P76.pdb
+    /Users/ada/hOCT1/OneDrive_1_24-03-2023/Alastair_phenix_refine_round2/hOCT1_apo_220323_real_space_refined_049.pdb
+    /Users/ada/hOCT1/build-models/hOCT1-twochains/01_hOCT1-twochains_box.pdb
+
+VMD selection string for overlapping residues:
+
+    resid 19 to 279 or resid 332 to 515
