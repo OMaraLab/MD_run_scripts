@@ -28,13 +28,15 @@ For any gereric MD system, your production folder should look something like `Te
 
 If your production run is named GlyT2_apo_POPC_CHOL, you MUST have five things in your production folder
 
-* A submission script named `GlyT2_apo_POPC_CHOL` (**NB:** not `GlyT2_apo_POPC_CHOL.sh`)
+* A submission script named `GlyT2_apo_POPC_CHOL` 
+  * (**NB:** not `GlyT2_apo_POPC_CHOL.sh`, `GlyT2_apo_POPC_CHOL.slurm` or `GlyT2_apo_POPC_CHOL.pbs`)
 * An mdp file named `GlyT2_apo_POPC_CHOL.mdp`
 * An index file named `GlyT2_apo_POPC_CHOL.ndx`
 * A topology file named `GlyT2_apo_POPC_CHOL.top`
-* Starting coordinates named `GlyT2_apo_POPC_CHOL_start.gro`  (**NB:** Note the different filename)
+* Starting coordinates named `GlyT2_apo_POPC_CHOL_start.gro`  
+  * (**NB:** Note the different filename)
 
-You must also have your forcefield folder and all .itp files in the locations referenced by your `.top` file.
+You must also have your forcefield folder and all `.itp` files in the locations referenced by your `.top` file.
 
 If any of these files are missing, our generic submission scripts will not function correctly.
 
