@@ -90,3 +90,5 @@ if (( steps_done < steps_wanted )); then
     echo "Submitting next job in sequence $PBS_JOBNAME."
     qsub $PBS_JOBNAME
 fi
+
+cp ${PBS_JOBNAME}.log lastlog.txt

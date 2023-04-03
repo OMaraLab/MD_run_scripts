@@ -94,4 +94,8 @@ fi
 
 sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
 
+## backup logfile for debugging
+
+cp ${SURM_JOB_NAME}.log lastlog.txt
+
 #####  END  #####

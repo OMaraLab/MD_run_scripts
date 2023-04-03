@@ -64,7 +64,7 @@ module load gromacs/2021.4-gpuvolta
 unset OMP_NUM_THREADS
 
 GMX='gmx'
-GMXMDRUN='gmx mdrun -maxh 3.95 -nb gpu'
+GMXMDRUN='gmx mdrun -maxh 3.95 -nb gpu -pin -ntmpi 2 -ntomp 12'
 
 
 ## GROMPP if there's no TPR file (eg, this is the first submission)
@@ -89,3 +89,5 @@ if (( steps_done < steps_wanted )); then
     echo "Submitting next job in sequence $PBS_JOBNAME."
     qsub $PBS_JOBNAME
 fi
+
+cp ${PBS_JOBNAME}.log lastlog.txt

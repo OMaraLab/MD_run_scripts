@@ -1,0 +1,26 @@
+# save this file as ~/.bash_aliases, then add the following lines to ~/.bashrc
+#
+#     # Load aliases
+#     if [ -f ~/.bash_aliases ]; then
+#         . ~/.bash_aliases
+#     fi
+#
+
+# alias qstat to show relevant information about your own jobs 
+alias qstat='squeue --me -o "%.18i %.9P %.32j %.8u %.8T %.10M %.6D %R"'
+
+# template to transfer to your own user folder
+alias ada="cd /group/pawsey0420/ada && pwd"
+
+
+# batch rename all files with name $1* to name $2*
+rename_files() {
+  local old_pattern="$1"
+  local new_pattern="$2"
+  for file in "$old_pattern"*; do
+    mv "$file" "${file/$old_pattern/$new_pattern}"
+  done
+}
+
+# cleanout:  changes \r (carriage return) to \n (newline) to make slurm-TKTKTK.out files easier to read on some ssh platforms
+alias cleanout="sed -i 's|\r|\n|g'" # clean output file carriage returns for readability

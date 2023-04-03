@@ -8,7 +8,7 @@ nstcomm             =  10
 nstxout             =  5000
 nstvout             =  50000
 nstfout             =  0
-nstxtcout           =  50000
+nstxtcout           =  0           ; don't save
 nstlist             =  10
 ns_type             =  grid
 coulombtype         =  pme
@@ -22,7 +22,7 @@ fourierspacing      =  0.12
 ; Berendsen temperature coupling is on in two groups
 Tcoupl              =  v-rescale 
 tau_t               =  0.1       0.1
-; MARTYNA, edit the line below here
+; Temperature groups defined in the next line, these should match your index file
 tc-grps             =  Water_and_ions non_water_ions  
 ref_t               =   300       300      
 ; Pressure coupling is on
