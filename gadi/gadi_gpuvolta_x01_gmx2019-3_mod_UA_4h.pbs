@@ -84,7 +84,7 @@ mdrun_command='gmx mdrun'
     # Number of ranks is easily calculated
     num_ranks=`echo "$num_threads / $OMP_NUM_THREADS" | bc `
     # Put it all together
-    mdrun_command="$mdrun_command -ntmpi 1 -ntomp 24"
+    mdrun_command="$mdrun_command -ntmpi 1 -ntomp 24"    # we might want to benchmark this further - AQ
 else
     echo "NOT IMPLEMENTED"
     errexit

@@ -12,6 +12,8 @@
 
 ## General-purpose resubmit script for GROMACS jobs on Wiener
 
+## IMPORTANT:  MAKE SURE YOU BENCHMARK.  MY PERFORMANCE WITH THIS SCRIPT HAS BEEN VERY SPOTTY RECENTLY
+
 ## this runs jobs in four hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
 ## nsteps is set in the mdp

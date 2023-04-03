@@ -64,7 +64,7 @@ module load gromacs/2021.4-gpuvolta
 unset OMP_NUM_THREADS
 
 GMX='gmx'
-GMXMDRUN='gmx mdrun -maxh 3.95 -nb gpu -pin -ntmpi 1 -ntomp 12'
+GMXMDRUN='gmx mdrun -maxh 3.95 -nb gpu -pin -ntmpi 1 -ntomp 12'  # when I run without explicitly setting -ntmpi and -ntomp performance goes through the floor. ¯\_(ツ)_/¯
 
 
 ## GROMPP if there's no TPR file (eg, this is the first submission)
