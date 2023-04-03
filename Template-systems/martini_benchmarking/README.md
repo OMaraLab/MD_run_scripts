@@ -4,4 +4,4 @@ These scripts 2ere used to generate martini waterboxes of sizes ranging from 10 
 
 These waterboxes were used for benchmarking.  
 
-You can use this as a basis to regenerate these waterbnoxes, or to generate other waterboxes, for future benchmarking. 
+You can use this as a basis to regenerate these waterbnoxes, or to generate other waterboxes, for future benchmarking.
