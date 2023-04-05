@@ -8,7 +8,8 @@
 #SBATCH --account=a_omara
 
 
-## General-purpose resubmit script for GROMACS jobs on Bunya
+## General-purpose resubmit script for GROMACS jobs on Bunya CPU nodes
+## Uses Gromacs 2021.4 CPU only singularity container
 
 ## this runs jobs in four hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
@@ -30,7 +31,7 @@
 
 #####  SETUP ENVIRONMENT  #####
 
-module load singularity
+##### MODULE LOADS WOULD GO HERE
 
 # Define error function so we can see the error code given when something
 # important crashes
@@ -53,11 +54,6 @@ export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/
 
 GMX='singularity run  /scratch/user/uqadaqu1/containers/gromacs_2021.4_CPU.sif gmx'
 GMXMDRUN='singularity run /scratch/user/uqadaqu1/containers/gromacs_2021.4_CPU.sif gmx mdrun -ntmpi 8 -ntomp 6 -pin on -pme cpu -dlb yes -maxh 3.95'
-
-### Alternate GMXMDRUN command that does nb calcs on the GPU
-### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 
-
-# GMXMDRUN='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -nb gpu -dlb yes -maxh 9.95'
 
 #####  START MD WITH A GROMPP  #####
 
@@ -88,7 +84,7 @@ fi
 
 sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
 
-## backup logfile for debugging
+## backup logfile for live debugging
 
 cp ${SLURM_JOB_NAME}.log lastlog.txt
 

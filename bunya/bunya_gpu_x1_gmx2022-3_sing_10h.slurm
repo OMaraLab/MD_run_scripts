@@ -14,7 +14,8 @@
 # UPDATE:  It did! 51.096  ns/day with a 237498 particle gromos 54a7 system
 # I've done some more benchmarking but everything else has been worse
 
-## General-purpose resubmit script for GROMACS jobs on Bunya
+## General-purpose resubmit script for GROMACS jobs on Bunya GPU
+# Uses Gromacs 2022.3 nvidia singularity container
 
 ## this runs jobs in four hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
@@ -50,8 +51,6 @@ errexit ()
         exit $errstat
     fi
 }
-
-srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l 
 
 export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 

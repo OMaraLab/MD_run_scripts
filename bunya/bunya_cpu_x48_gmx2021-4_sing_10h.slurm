@@ -1,18 +1,17 @@
 #!/bin/bash
 
-#SBATCH --nodes=1 
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=48
-#SBATCH --mem=256G
-#SBATCH --partition=gpu
 #SBATCH --time=10:00:00
-#SBATCH --gres=gpu:a100:1
+#SBATCH --partition=general
 #SBATCH --account=a_omara
 
-## General-purpose resubmit script for GROMACS jobs on Bunya GPU
-# Uses Gromacs 2021.4 nvidia singularity container
 
-## this runs jobs in four hour blocks with checkpinting and resubmission, 
+## General-purpose resubmit script for GROMACS jobs on Bunya CPU nodes
+## Uses Gromacs 2021.4 CPU only singularity container
+
+## this runs jobs in ten hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
 ## nsteps is set in the mdp
 ## Starting structure, .top, .ndx and .mdp should have the same name as the
@@ -32,6 +31,7 @@
 
 #####  SETUP ENVIRONMENT  #####
 
+##### MODULE LOADS WOULD GO HERE
 
 # Define error function so we can see the error code given when something
 # important crashes
@@ -48,19 +48,12 @@ errexit ()
     fi
 }
 
-# srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l 
 
 export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
-export OMP_NUM_THREADS=48
 
+GMX='singularity run  /scratch/user/uqadaqu1/containers/gromacs_2021.4_CPU.sif gmx'
+GMXMDRUN='singularity run /scratch/user/uqadaqu1/containers/gromacs_2021.4_CPU.sif gmx mdrun -ntmpi 8 -ntomp 6 -pin on -pme cpu -dlb yes -maxh 9.95'
 
-GMX='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx'
-GMXMDRUN='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx mdrun -pin on -pme cpu -dlb yes -ntomp 48 -maxh 9.95'
-
-### Alternate GMXMDRUN command that does nb calcs on the GPU
-### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 
-
-# GMXMDRUN='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -nb gpu -dlb yes -maxh 9.95'
 
 #####  START MD WITH A GROMPP  #####
 
@@ -86,10 +79,6 @@ if (( steps_done < steps_wanted )); then
     echo "Submitting next job in sequence ${SLURM_JOB_NAME}."
     sbatch ${SLURM_JOB_NAME}
 fi
-
-## clean up linebreaks in output file
-
-sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
 
 ## backup logfile for live debugging
 
