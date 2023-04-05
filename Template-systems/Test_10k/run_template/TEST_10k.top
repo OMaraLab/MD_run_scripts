@@ -27,7 +27,7 @@
 
 [ system ]
 ; Name
-Protein in water
+GlyT2 Gromos54a7 test system
 
 [ molecules ]
 ; Compound        #mols
