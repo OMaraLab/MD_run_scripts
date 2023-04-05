@@ -1,0 +1,30 @@
+;	This is a standalone topology file
+;
+;	Created by hand by Ada Quinn, ada.quinn@uq.edu.au , 4 Apr 2023
+;
+
+#define HEAVY_H
+
+; Include forcefield parameters
+#include "gromos54a7.ff/forcefield.itp"
+
+; Include water topology
+#include "gromos54a7.ff/spc.itp"
+
+#ifdef POSRES_WATER
+; Position restraint for each water oxygen
+[ position_restraints ]
+;  i funct       fcx        fcy        fcz
+   1    1       1000       1000       1000
+#endif
+
+; Include topology for ions
+#include "gromos54a7.ff/ions.itp"
+
+[ system ]
+; Name
+Waterbox
+
+[ molecules ]
+; Compound        #mols
+
