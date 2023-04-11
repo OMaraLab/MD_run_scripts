@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#! usr/bin/env bash
 
 # calculate contact fractions for gromacs trajectory
 
@@ -89,79 +89,35 @@
 
 
 
-drugs=(  "BB4R" "BB4S" "C06R" "C06S" "E25R" "E25S" "G07R" "G07S"  "H03R"  "H03S"  ) # generate and include restraints for these compounds
+drugs=(  "BB4R" "BB4S" "C06R" "C06S" "E25R" "E25S" "G07R" "G07S"  "H03R"  "H03S"  ) 
 
 for drug in ${drugs[@]}; do
 
 echo "#### #### #### #### ####"
-echo $drug
+echo ${drug}
 echo "#### #### #### #### ####"
 
-mkdir $drug
-mkdir $drug/upper
-cd $drug/upper
-cp /media/uqadaqu1/GUMPTION/Atomwise2/analysis/contacts-vmd/contactFreq.tcl ./
-cp /media/uqadaqu1/GUMPTION/Atomwise2/analysis/contacts-vmd/contactfreq.sh ./
-cp /media/uqadaqu1/GUMPTION/Atomwise2/analysis/contacts-vmd/process_contacts.py ./
-printf "source contactFreq.tcl \n source contactfreq.sh \n exit \n"|vmd /media/uqadaqu1/GUMPTION/Atomwise2/analysis/clean/$drug\_upper*frame0.gro /media/uqadaqu1/GUMPTION/Atomwise2/analysis/clean/$drug\_upper*cat.xtc -dispdev text
-./process_contacts.py  GlyT2 POPC_CHOL $drug LAS upper -1
+mkdir ${drug}
+mkdir ${drug}/upper
+cd ${drug}/upper
+cp ../../contactFreq.tcl ./
+cp ../../contactfreq.sh ./
+cp ../../process_contacts.py ./
+printf "source contactFreq.tcl \n source contactfreq.sh \n exit \n"|vmd ../../../clean/${drug}_upper*frame0.gro ../../../clean/${drug}_upper*short_1ns_cat.xtc -dispdev text
+./process_contacts.py  GlyT2 POPC_CHOL ${drug} LAS upper -1
 
-# mkdir ../lower
-# cd ../lower
+mkdir ../lower
+cd ../lower
 
-# cp /media/uqadaqu1/GUMPTION/Atomwise2/analysis/contacts-vmd/contactFreq.tcl ./
-# cp /media/uqadaqu1/GUMPTION/Atomwise2/analysis/contacts-vmd/contactfreq.sh ./
-# cp /media/uqadaqu1/GUMPTION/Atomwise2/analysis/contacts-vmd/process_contacts.py ./
-# printf "source contactFreq.tcl \n source contactfreq.sh \n exit \n"|vmd /media/uqadaqu1/GUMPTION/Atomwise2/analysis/clean/$drug\_lower*frame0.gro /media/uqadaqu1/GUMPTION/Atomwise2/analysis/clean/$drug\_lower*1ns_cat.xtc -dispdev text
-# ./process_contacts.py  GlyT2 POPC_CHOL $drug LAS lower 0
+cp ../../contactFreq.tcl ./
+cp ../../contactfreq.sh ./
+cp ../../process_contacts.py ./
+printf "source contactFreq.tcl \n source contactfreq.sh \n exit \n"|vmd ../../../clean/${drug}_lower*frame0.gro ../../../clean/${drug}_lower*1ns_cat.xtc -dispdev text
+./process_contacts.py  GlyT2 POPC_CHOL ${drug} LAS lower 0
 
 cd ../..
 
 done
 
-cd /media/uqadaqu1/GUMPTION/Atomwise2/analysis/contacts/pr
+cd ../../../contacts/pr
 ./concat.py
-
-
-# # contacts template
-
-# n="0"
-# drug=$1
-# pose=$2
-# site="LAS"
-
-# while [ $n -le 3 ]
-
-# do
-
-# if [$n == "0"]; then
-#     i="cat"
-# else
-#     i=$n
-# fi
-
-# mkdir run$i
-
-# cd run$i
-# cp ../../../contactFreq.tcl ./
-# cp ../../../contactfreq.sh ./
-# cp ../../../process_contacts.py ./
-
-# printf "source contactFreq.tcl \n source contactfreq.sh \n exit \n"|vmd $gro $xtc -dispdev text
-# ./process_contacts.py  GlyT2 POPC_CHOL $INHIBITOR $SITE $POSE $REP
-
-# cd ../run2
-# cp /media/ada/GUMPTION/GlyT2-Atomwise/analysis/contacts-vmd/contactFreq.tcl ./
-# cp /media/ada/GUMPTION/GlyT2-Atomwise/analysis/contacts-vmd/contactfreq.sh ./
-# cp /media/ada/GUMPTION/GlyT2-Atomwise/analysis/contacts-vmd/process_contacts.py ./
-# printf "source contactFreq.tcl \n source contactfreq.sh \n exit \n"|vmd $gro $xtc -dispdev text
-# ./process_contacts.py  GlyT2 $MEMBRANE $INHIBITOR $SITE $REP
-
-# cd ../run3
-# cp /media/ada/GUMPTION/GlyT2-Atomwise/analysis/contacts-vmd/contactFreq.tcl ./
-# cp /media/ada/GUMPTION/GlyT2-Atomwise/analysis/contacts-vmd/contactfreq.sh ./
-# cp /media/ada/GUMPTION/GlyT2-Atomwise/analysis/contacts-vmd/process_contacts.py ./
-# printf "source contactFreq.tcl \n source contactfreq.sh \n exit \n"|vmd $gro $xtc -dispdev text
-# ./process_contacts.py  GlyT2 $MEMBRANE $INHIBITOR $REP
-
-
