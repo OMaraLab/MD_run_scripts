@@ -66,19 +66,24 @@ export OMP_NUM_THREADS=12
 
 GMX='gmx'
 GMXMDRUN="mpirun -np 4 --map-by ppr:1:NUMA:PE=12 gmx_mpi mdrun -ntomp ${OMP_NUM_THREADS} -maxh 3.95"
+ # Notes:
+ # -cpi: Continue from checkpoint if available, otherwise start new simulation
+# -maxh n: Write a checkpoint and terminate after 0.99 * n hours
+# -nb gpu: Die if GPU not usable (unfortunately, won't die if GPU isn't found)
 
+#####  START MD WITH A GROMPP  #####
 
 ## GROMPP if there's no TPR file (eg, this is the first submission)
 if [ ! -f ${PBS_JOBNAME}.tpr ]; then
     $GMX grompp -f ${PBS_JOBNAME}.mdp -c ${PBS_JOBNAME}_start.gro -o ${PBS_JOBNAME}.tpr -p ${PBS_JOBNAME}.top  -n ${PBS_JOBNAME}.ndx -maxwarn 2 || errexit
 fi
 
-## run MD!
+#####  RUN MD FOR 3.95 HOURS  #####
+
  $GMXMDRUN -v -deffnm ${PBS_JOBNAME} -cpi ${PBS_JOBNAME}.cpt || errexit
- # Notes:
- # -cpi: Continue from checkpoint if available, otherwise start new simulation
-# -maxh n: Write a checkpoint and terminate after 0.99 * n hours
-# -nb gpu: Die if GPU not usable (unfortunately, won't die if GPU isn't found)
+
+#####  CHECK IF JOB IS DONE; IF NOT DONE RESUBMIT THIS SCRIPT  #####
+
 
 # Check the log file for the number of steps completed
 steps_done=`perl -n -e'/Statistics over (\d+) steps using (\d+) frames/ && print $1' ${PBS_JOBNAME}.log`
