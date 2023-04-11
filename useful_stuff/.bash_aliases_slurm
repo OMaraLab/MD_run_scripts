@@ -6,8 +6,8 @@
 #     fi
 #
 
-# alias qstat to show relevant information about your own jobs 
-alias qstat='squeue --me -o "%.18i %.9P %.32j %.8u %.8T %.10M %.6D %R"'
+# alias qstat to show relevant information about your own jobs, sorted by job name 
+alias qstat='squeue --me -o "%.18i %.9P %.32j %.8u %.8T %.10M %.6D %R" --sort=+j'
 
 # template to transfer to your own user folder
 alias ada="cd /group/pawsey0420/ada && pwd"
@@ -22,5 +22,31 @@ rename_files() {
   done
 }
 
-# cleanout:  changes \r (carriage return) to \n (newline) to make slurm-TKTKTK.out files easier to read on some ssh platforms
-alias cleanout="sed -i 's|\r|\n|g'" # clean output file carriage returns for readability
+# cleanfile:  changes \r (carriage return) to \n (newline) to make slurm-TKTKTK.out files easier to read on some ssh platforms
+alias cleanfile="sed -i 's|\r|\n|g'" # clean output file carriage returns for readability
+
+# cleanout: run cleanfile every single slurm-*.out file, and put them all in an outfiles folder
+# if passed a filename as an argument, open that file to the end
+cleanout() {
+
+cleanfile slurm-[0-9]*[0-9].out
+
+mydir="${PWD##*/}"
+
+if [ $mydir != "outfiles" ]
+then
+
+    if [ ! -d outfiles ]
+    then
+        mkdir outfiles
+    fi
+    mv slurm-[0-9]*[0-9].out outfiles/
+fi
+
+if [ -n "$1" ]; then
+# if passed an argument, open the file with name oe/$arg
+  less +G outfiles/$1
+fi
+}
+
+alias cleanoe="cleanout"# if you use the command to sort pbs output files, run the command to sort slurm output files

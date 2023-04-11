@@ -29,34 +29,11 @@ alias cleanout="sed -i 's|\r|\n|g'" # clean output file carriage returns for rea
 # cleanoe:
 cleanoe() {
 # reformat all .[oe][0-9]* files to be more readable, and compartmentalises them into ./oe/
-# if you pass the name of as .[oe][0-9]* file as an argument, it will use less to 
+# if you pass the name of as .[oe][0-9]* file as an argument, it will use less +G to 
 # open that file and scroll to the end
 
-# Background:
-
-# every pbs job saves stdout to .o[0-9]* and stderr to .e[0-9]*
-# these files are very valuable during benchmarking and debugging, but are typically 
-# compeltely useless once a job is complete
-
-# We run our simulation in a large number of  multiple 4 hour blocks, which makes
-# a lot of *.[oe][0-9]* files. This makes ls and ll output very hard to read, and
-# chews up our inode quota
-
-# cleanoe reformats the files for readabilty, then moves them all to ./oe/ to keep
-# them out of the way, and make them easy to delete when you're done.
-
-# this also reformats them to make them easier to read
-
-# some terminal clients will render carriage returns as ^M rather than as a line break
-# which means the entire step by step mdrun output shows as one very, very long line
-# this sucks to interact with 
-
-# hence, for all *.[oe][0-9]* files in the working directory, change carriage returns to newlines.  
-# this makes files much more readable through some terminal platforms
-
-
 if [ -f /usr/local/bin/gsed ] 
-# check if gsed is installed.  On bsd systems like macos you need to use gsed if on a mac
+# check if gsed is installed.  On bsd systems like macos you need to use gsed
 then
     gsed -i 's|\r|\n|g' *.[oe][0-9]*
 else
@@ -82,14 +59,43 @@ if [ -n "$1" ]; then
 fi
 }
 
+alias cleanout="cleanoe" # if you use the command to sort slurm output files, run the command to sort pbs output files
+
+# Cleanoe Background:
+
+# every pbs job saves stdout to .o[0-9]* and stderr to .e[0-9]*
+# these files are very valuable during benchmarking and debugging, but are typically 
+# compeltely useless once a job is complete
+
+# We run our simulation in a large number of  multiple 4 hour blocks, which makes
+# a lot of *.[oe][0-9]* files. This makes ls and ll output very hard to read, and
+# chews up our inode quota
+
+# cleanoe reformats the files for readabilty, then moves them all to ./oe/ to keep
+# them out of the way, and make them easy to delete when you're done.
+
+# this also reformats them to make them easier to read
+
+# some terminal clients will render carriage returns as ^M rather than as a line break
+# which means the entire step by step mdrun output shows as one very, very long line
+# this sucks to interact with 
+
+# hence, for all *.[oe][0-9]* files in the working directory, change carriage returns to newlines.  
+# this makes files much more readable through some terminal platforms
 
 
-# qstat -f | grep 'PBS_O_WORKDIR\|Job Id'
+
+# qwhich : generates a list of the jobid and filepath of your currently queued jobs, 
+# ordered alphabetically by file path, then appends this to the end of ~/joblog.log
+# you can use this to check which jobs died overnight
+# sometimes the massive unwieldy grep / sed / awk chain is buggy but you can usually figure it out
+
 qwhich() {
 echo "" >> ~/joblog.log
 echo "" >> ~/joblog.log
 date >> ~/joblog.log
-qstat -f | grep 'PBS_O_WORKDIR\|Job Id\|run[0-9][,]\|,PBS_O_SYSTEM' | sed 's/\t//g' | sed 's/PBS_O_WORKDIR=//' | sed 's/,PBS_O_SYSTEM=Linux,PROJECT=q95,PBS_NCI_HT=1,//' | tr -d '\n'  | sed 's/.gadi-pbs/   /g' | sed 's/Job Id/\nJob Id/g' | tr -d "," | sort -k 4 >> ~/joblog.log
+qstat -f | grep 'PBS_O_WORKDIR\|Job Id\|_r[0-9]|run[0-9][,]\|,PBS_O_SYSTEM' | sed 's/\t//g' | sed 's/PBS_O_WORKDIR=//' | sed 's/,PBS_O_SYSTEM=Linux,PROJECT=q95,PBS_NCI_HT=1,//' | tr -d '\n'  | sed 's/.gadi-pbs/   /g' | sed 's/Job Id/\nJob Id/g' | tr -d "," | sort -k 4 >> ~/joblog.log
 echo "" >> ~/joblog.log
 less +G ~/joblog.log
 }
+
