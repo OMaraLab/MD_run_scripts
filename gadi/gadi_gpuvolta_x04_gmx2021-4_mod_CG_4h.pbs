@@ -24,9 +24,6 @@
 ## IMPORTANT: SCRIPT NAME SHOULD NOT END WITH .sh
 
 
-## The script automatically chooses the multithreading 
-## mode based on the number of CPUs it finds. 
-
 
 # Define error function so we can see the error code given when something
 # important crashes
