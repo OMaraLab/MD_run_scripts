@@ -58,12 +58,7 @@ parselog() {
 # good for checking the status of everything in a project really quickly, or for compiling benchmarking data
 
   status_file="status.txt"
-  touch $status_file
-
-    if [  ! -e "$status_file" ]; then
-      echo "couldn't write to ${status_file}, instead writing to ~/jobstatus.txt"
-      status_file="~/jobstatus.txt"
-    fi
+  touch $status_file 
 
   echo "================================" >> $status_file
   date >> $status_file
