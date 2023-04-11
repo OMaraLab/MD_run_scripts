@@ -96,4 +96,8 @@ if (( steps_done < steps_wanted )); then
     qsub $PBS_JOBNAME
 fi
 
-cp ${PBS_JOBNAME}.log lastlog.txt
+## backup logfile for debugging
+
+cp ${SLURM_JOB_NAME}.log lastlog.txt
+
+#####  END  #####
