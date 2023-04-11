@@ -29,24 +29,64 @@ alias cleanfile="sed -i 's|\r|\n|g'" # clean output file carriage returns for re
 # if passed a filename as an argument, open that file to the end
 cleanout() {
 
-cleanfile slurm-[0-9]*[0-9].out
+  cleanfile slurm-[0-9]*[0-9].out
 
-mydir="${PWD##*/}"
+  mydir="${PWD##*/}"
 
-if [ $mydir != "outfiles" ]
-then
+  if [ $mydir != "outfiles" ]
+  then
 
-    if [ ! -d outfiles ]
-    then
-        mkdir outfiles
-    fi
-    mv slurm-[0-9]*[0-9].out outfiles/
-fi
+      if [ ! -d outfiles ]
+      then
+          mkdir outfiles
+      fi
+      mv slurm-[0-9]*[0-9].out outfiles/
+  fi
 
-if [ -n "$1" ]; then
-# if passed an argument, open the file with name oe/$arg
-  less +G outfiles/$1
-fi
+  if [ -n "$1" ]; then
+  # if passed an argument, open the file with name oe/$arg
+    less +G outfiles/$1
+  fi
 }
 
 alias cleanoe="cleanout"# if you use the command to sort pbs output files, run the command to sort slurm output files
+
+
+parselog() {
+# Find all .log files in the current working directory
+# for each, save file path,final step reached, and ns/day to ./status.txt 
+
+  status_file="status.txt"
+
+  date >> $status_file
+
+  for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do 
+    echo "Processing $file"
+
+    # Add the file name to the status file
+    echo $file >> $status_file
+    echo >> $status_file
+
+    # Get the last line that matches the pattern "Step           Time"
+    step_time_line=$(grep -nP 'Step\s+Time' $file | tail -1 | cut -d ":" -f1)
+    #echo $step_time_line
+    # Add the found line, and the next line, to the status file
+    #echo $(tail -2 $file | head -1) >> $status_file
+    if [ -n "$step_time_line" ]; then
+      sed -n "${step_time_line}p" $file >> $status_file
+      sed -n "$((${step_time_line}+1))p" $file  >> $status_file
+      echo >> $status_file
+    fi
+
+    # Get the last line that matches the pattern "Performance:"
+    #echo $perf_line
+    perf_line=$(grep -nP 'Performance:' $file | tail -1| cut -d ":" -f1)
+    # Add the found line, and the preceeding line, to the status file
+    if [ -n "$perf_line" ]; then
+      sed -n "$((${perf_line}-1))p" $file >> $status_file
+      sed -n "${perf_line}p" $file >> $status_file
+    fi
+    echo >> $status_file
+    echo >> $status_file
+  done
+}
