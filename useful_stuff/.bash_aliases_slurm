@@ -53,14 +53,23 @@ alias cleanoe="cleanout"# if you use the command to sort pbs output files, run t
 
 
 parselog() {
-# Find all .log files in the current working directory
+# Recursively find all *.log files in the current working directory
 # for each, save file path,final step reached, and ns/day to ./status.txt 
+# good for checking the status of everything in a project really quickly, or for compiling benchmarking data
 
   status_file="status.txt"
+  touch $status_file
 
+    if [  ! -e "$status_file" ]; then
+      echo "couldn't write to ${status_file}, instead writing to ~/jobstatus.txt"
+      status_file="~/jobstatus.txt"
+    fi
+
+  echo "================================" >> $status_file
   date >> $status_file
+  echo "================================" >> $status_file
 
-  for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do 
+  for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do # excludes log files with names like "03*.log" which are usually energy minimisation or eq
     echo "Processing $file"
 
     # Add the file name to the status file

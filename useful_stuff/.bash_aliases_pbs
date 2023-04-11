@@ -107,13 +107,18 @@ alias cleanout="cleanoe"
 
 
 parselog() {
-# Find all .log files in the current working directory
+# Find all .log files in the current working directory, searching recursively
 # for each, save file path,final step reached, and ns/day to ./status.txt 
+# good for checking the status of everything in a project really quickly, or for compiling benchmarking data
 
   status_file="status.txt"
+  touch $status_file
 
-  date >> $status_file
-
+    if [  ! -e "$status_file" ]; then
+      echo "couldn't write to ${status_file}, instead writing to ~/jobstatus.txt"
+      status_file="~/jobstatus.txt"
+    fi
+  
   for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do 
     echo "Processing $file"
 
