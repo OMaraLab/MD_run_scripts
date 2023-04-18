@@ -84,4 +84,6 @@ fi
 
 cp ${SLURM_JOB_NAME}.log lastlog.txt
 
+echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
+
 #####  END  #####
