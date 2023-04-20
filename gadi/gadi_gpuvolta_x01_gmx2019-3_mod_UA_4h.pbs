@@ -138,4 +138,9 @@ if (( steps_done < steps_wanted )); then
     qsub $PBS_JOBNAME
 fi
 
+## backup logfile for debugging
+
 cp ${PBS_JOBNAME}.log lastlog.txt
+echo "CLUSTERID=GADI-gpuvolta" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
+
+#####  END  #####

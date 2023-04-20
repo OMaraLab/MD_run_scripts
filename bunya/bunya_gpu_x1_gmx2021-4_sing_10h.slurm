@@ -32,7 +32,6 @@
 
 #####  SETUP ENVIRONMENT  #####
 
-
 # Define error function so we can see the error code given when something
 # important crashes
 errexit ()
@@ -96,5 +95,6 @@ sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
 cp ${SLURM_JOB_NAME}.log lastlog.txt
 
 echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
+echo "CLUSTERID=BUNYA A100 GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 #####  END  #####

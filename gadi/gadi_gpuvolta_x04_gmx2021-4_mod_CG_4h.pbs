@@ -95,6 +95,7 @@ fi
 
 ## backup logfile for debugging
 
-cp ${SLURM_JOB_NAME}.log lastlog.txt
+cp ${PBS_JOBNAME}.log lastlog.txt
+echo "CLUSTERID=GADI-gpuvolta" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 #####  END  #####

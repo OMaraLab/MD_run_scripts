@@ -85,5 +85,6 @@ fi
 cp ${SLURM_JOB_NAME}.log lastlog.txt
 
 echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
+echo "CLUSTERID=BUNYA CPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 #####  END  #####
