@@ -6,11 +6,9 @@
 #     fi
 #
 
-# alias qstat to show relevant information about your own jobs 
-alias qstat='squeue --me -o "%.18i %.9P %.32j %.8u %.8T %.10M %.6D %R"'
-
-# template to transfer to your own user folder
-alias ada="cd /group/pawsey0420/ada && pwd"
+# template to transfer to your own user folders
+alias ada="cd /scratch/q95/aq8103 && pwd"
+alias gada="cd /g/data/q95/aq8103 && pwd"
 
 
 # batch rename all files with name $1* to name $2*
@@ -27,7 +25,7 @@ rename_files() {
 # ordered alphabetically by file path, then appends this to the end of ~/joblog.log
 # you can use this to check which jobs died overnight
 
-# sometimes the massive unwieldy grep / sed / awk chain is buggy but you can usually figure it out
+# sometimes the massive unwieldy grep / sed / tr / awk chain is buggy but you can usually figure it out
 
 qwhich() {
   echo "" >> ~/joblog.log
@@ -37,7 +35,6 @@ qwhich() {
   echo "" >> ~/joblog.log
   less +G ~/joblog.log
 }
-
 
 
 # cleanout:  changes \r (carriage return) to \n (newline) to make slurm-TKTKTK.out files easier to read on some ssh platforms
@@ -50,16 +47,7 @@ cleanoe() {
       # if you pass the name of as .[oe][0-9]* file as an argument, it will use less +G to 
       # open that file and scroll to the end
 
-  if [ -f /usr/local/bin/gsed ] 
-  # check if gsed is installed.  
-  # on bsd based systems like macos you need to use gsed
-  # install it with $ hombrew install gsed
-
-  then
-      gsed -i 's|\r|\n|g' *.[oe][0-9]*
-  else
-      sed -i 's|\r|\n|g' *.[oe][0-9]*
-  fi
+cleanout *.[oe][0-9]*
 
   mydir="${PWD##*/}"
 
@@ -102,8 +90,6 @@ cleanoe() {
       # this makes files much more readable through some terminal platforms
 
 }
-
-alias cleanout="cleanoe" 
 
 
 parselog() {
