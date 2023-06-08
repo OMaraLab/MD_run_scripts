@@ -1,10 +1,10 @@
 #!/bin/bash
-#PBS -P q95
+#PBS -P hk07
 #PBS -q normal
 #PBS -l walltime=10:00:00
-#PBS -l mem=190GB
+#PBS -l mem=380GB
 #PBS -l jobfs=16000MB
-#PBS -l ncpus=48
+#PBS -l ncpus=192
 #PBS -l other=mpi:hyperthread
 #PBS -l wd
 #PBS -r y
@@ -60,13 +60,12 @@ fi
 module load gromacs/2021.4
 
 # Let GROMACS choose how to parallelise everything, unless we specify something later:
-unset OMP_NUM_THREADS
+export OMP_NUM_THREADS=12
 
 GMX='gmx'
 # GMXMDRUN='gmx mdrun -maxh 9.95'
-GMXMDRUN='gmx mdrun -maxh 9.95 -ntmpi 4 -ntomp 12'
-
-
+GMXMDRUN='mpirun -np 16 --map-by ppr:1:NUMA:PE=12 gmx_mpi mdrun -maxh 9.95 -ntomp 12'
+#GMXMDRUN='mpirun gmx mdrun -maxh 9.95'
 
 ## GROMPP if there's no TPR file (eg, this is the first submission)
 if [ ! -f ${PBS_JOBNAME}.tpr ]; then
