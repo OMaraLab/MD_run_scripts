@@ -10,6 +10,7 @@
 alias ada="cd /scratch/q95/aq8103 && pwd"
 alias gada="cd /g/data/q95/aq8103 && pwd"
 
+alias lll="ll | grep -vE '\\.[oe][0-9]+'" # list files in directory exlcluding pbs log files 
 
 # batch rename all files with name $1* to name $2*
 rename_files() {

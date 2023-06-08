@@ -12,6 +12,8 @@ alias qstat='squeue --me -o "%.18i %.9P %.32j %.8u %.8T %.10M %.6D %R" --sort=+j
 # template to transfer to your own user folder
 alias ada="cd /group/pawsey0420/ada && pwd"
 
+alias lll="ll | grep -v '\.out$'" # list files in directory exlcluding slurm log files 
+
 
 # batch rename all files with name $1* to name $2*
 rename_files() {

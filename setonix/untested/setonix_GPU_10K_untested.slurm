@@ -1,7 +1,7 @@
 "GPU01_TEST10K" 23L, 661B                                                                                            3,33          All
 #!/bin/bash --login
 
-#SBATCH --account=pawsey-0420-gpu
+#SBATCH --account=pawsey0420-gpu
 #SBATCH --partition=gpu
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
@@ -10,11 +10,6 @@
 #SBATCH --time=1:00:00
 
 # test script for running on gpus on setonix
-# currently fails with error message:
-#
-#   sbatch: error: Batch job submission failed: Invalid account or account/partition combination specified
-#
-# so I guess we need to wait for a gpu account string to be switched on
 
 
 gromacs-amd-gfx90a/2022.3.amd1_174
