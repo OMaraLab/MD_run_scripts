@@ -173,7 +173,7 @@ You can use these commands to check the status of all queued jobs.
 
 You can always check the end of your gromacs log file to see how far your simulation has gotten, and how quickly it is running.   The queuing systems also generate error logs for every run.  On pbs systems, these will be called something like `systemname.e72234683`. On slurm systems these will be called something `slurm-83245234.out`.  If your job has stopped and you don't know why, read the most recent error log and see what happened.
 
-You can these log files (and any other text file) through the command line using the program `less`.  Run it with ` $ less filename.log`.  Press `G` to scroll to the end of the file.  When you are done reading, press `q` to quit `less`
+You can these log files (and any other text file) through the command line using the program `less`.  Run it with `$ less filename.log`.  Press `G` to scroll to the end of the file.  When you are done reading, press `q` to quit `less`
 
 It is also usually a good idea to look at your system in VMD, to see if everything looks normal.  To do this, use scp to download your system to your local machine, and look the it in VMD.  
 
