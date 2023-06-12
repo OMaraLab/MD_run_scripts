@@ -11,6 +11,8 @@ The most up to date version of this will always be hosted on github at [https://
 * [UQ RCC user guide](https://github.com/UQ-RCC/hpc-docs)
 * [CTCMS guide to working with linux and supercomputers](https://ctcms-uq.github.io/)
   * If these instructions do not make sense to you, read the CTCMS guide first.
+* [Gromos54A7 system setup tutorial](https://github.com/recombinatrix/UA-memb-tutorial)
+* [Martini system setup tutorial](https://github.com/recombinatrix/CG-memb-tutorial)
 
 ## Submission Scripts
 
@@ -68,6 +70,40 @@ If your production run is named GlyT2_apo_POPC_CHOL, you MUST have five things i
 You must also have your forcefield folder and all `.itp` files in the locations referenced by your `.top` file.
 
 If any of these files are missing, our generic submission scripts will not function correctly.
+
+It should look something like this
+
+~~~txt
+
+./GlyT2_apo_POPC_CHOL
+├── gromos54a7.ff
+│   ├── example1.itp
+│   └── example2.itp
+├── r1
+│   ├── GlyT2_apo_POPC_CHOL_r1
+│   ├── GlyT2_apo_POPC_CHOL_r1.mdp
+│   ├── GlyT2_apo_POPC_CHOL_r1.ndx
+│   ├── GlyT2_apo_POPC_CHOL_r1_start.gro
+│   └── GlyT2_apo_POPC_CHOL_r1.top
+├── r2
+│   ├── GlyT2_apo_POPC_CHOL_r2
+│   ├── GlyT2_apo_POPC_CHOL_r2.mdp
+│   ├── GlyT2_apo_POPC_CHOL_r2.ndx
+│   ├── GlyT2_apo_POPC_CHOL_r2_start.gro
+│   └── GlyT2_apo_POPC_CHOL_r2.top
+├── r3
+│   ├── GlyT2_apo_POPC_CHOL_r3
+│   ├── GlyT2_apo_POPC_CHOL_r3.mdp
+│   ├── GlyT2_apo_POPC_CHOL_r3.ndx
+│   ├── GlyT2_apo_POPC_CHOL_r3_start.gro
+│   └── GlyT2_apo_POPC_CHOL_r3.top
+└── run_template
+    ├── GlyT2_apo_POPC_CHOL_r1
+    ├── GlyT2_apo_POPC_CHOL_r1.mdp
+    ├── GlyT2_apo_POPC_CHOL_r1.ndx
+    ├── GlyT2_apo_POPC_CHOL_r1_start.gro
+    └── GlyT2_apo_POPC_CHOL_r1.top
+~~~
 
 ### Step two:  Copy the system to the supercomputer / cluster you wish to use
 
