@@ -1,0 +1,80 @@
+[ moleculetype ]
+; Name            nrexcl
+SUB     3
+
+[ atoms ]
+;   nr       type  resnr residue  atom   cgnr     charge       mass  typeB    chargeB      massB
+; residue   1 SUB rtp SUB  q  0.0
+     1       MNH3      1    SUB    MN1      1          0    8.51535   ; qtot 0
+     2       MNH3      1    SUB    MN2      1          0    8.51535   ; qtot 0
+     3         NL      1    SUB      N      1      0.129          0   ; qtot 0.129
+     4          H      1    SUB     H1      1      0.248          0   ; qtot 0.377
+     5          H      1    SUB     H2      1      0.248          0   ; qtot 0.625
+     6          H      1    SUB     H3      1      0.248          0   ; qtot 0.873
+     7        CH2      1    SUB     CA      2      0.127     14.027   ; qtot 1
+     8          C      1    SUB      C      3       0.27     12.011   ; qtot 1.27
+     9         OM      1    SUB     O1      3     -0.635    15.9994   ; qtot 0.635
+    10         OM      1    SUB     O2      3     -0.635    15.9994   ; qtot 0
+
+[ bonds ]
+;  ai    aj funct            c0            c1            c2            c3
+    3     4     2    gb_2
+    3     5     2    gb_2
+    3     6     2    gb_2
+    3     7     2    gb_21
+    7     8     2    gb_27
+    8     9     2    gb_6
+    8    10     2    gb_6
+
+[ constraints ]
+;  ai    aj funct            c0            c1
+    1     7     2 
+    2     7     2 
+    1     2     2 
+
+[ pairs ]
+;  ai    aj funct            c0            c1            c2            c3
+    3     9     1 
+    3    10     1 
+    4     8     1 
+    5     8     1 
+    6     8     1 
+
+[ angles ]
+;  ai    aj    ak funct            c0            c1            c2            c3
+    4     3     5     2    ga_10
+    4     3     6     2    ga_10
+    4     3     7     2    ga_11
+    5     3     6     2    ga_10
+    5     3     7     2    ga_11
+    6     3     7     2    ga_11
+    3     7     8     2    ga_13
+    7     8     9     2    ga_22
+    7     8    10     2    ga_22
+    9     8    10     2    ga_38
+
+[ dihedrals ]
+;  ai    aj    ak    al funct            c0            c1            c2            c3            c4            c5
+    4     3     7     8     1    gd_39
+    3     7     8    10     1    gd_45
+    3     7     8    10     1    gd_42
+
+[ dihedrals ]
+;  ai    aj    ak    al funct            c0            c1            c2            c3
+    8     7    10     9     2    gi_1
+
+[ virtual_sites3 ]
+;  ai    aj    ak    al funct            c0            c1
+    3     7     1     2     1 
+    4     7     1     2     1 
+
+[ virtual_sites3 ]
+;  ai    aj    ak    al funct            c0            c1            c2
+    5     7     1     2    -4 
+    6     7     1     2     4 
+
+; Include Position restraint file
+#ifdef POSRES
+#include "zwitter_gly_posres.itp"
+#endif
+
