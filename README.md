@@ -76,29 +76,35 @@ It should look something like this
 ~~~txt
 
 ./GlyT2_apo_POPC_CHOL
-├── gromos54a7.ff
+├── gromos54a7.ff                           # this is your forcefield folder
 │   ├── example1.itp
 │   └── example2.itp
-├── r1
-│   ├── GlyT2_apo_POPC_CHOL_r1
-│   ├── GlyT2_apo_POPC_CHOL_r1.mdp
-│   ├── GlyT2_apo_POPC_CHOL_r1.ndx
-│   ├── GlyT2_apo_POPC_CHOL_r1_start.gro
-│   └── GlyT2_apo_POPC_CHOL_r1.top
-├── r2
-│   ├── GlyT2_apo_POPC_CHOL_r2
-│   ├── GlyT2_apo_POPC_CHOL_r2.mdp
+├── r1                                      # this folder contains replicate 1
+│   ├── GlyT2_apo_POPC_CHOL_r1              # this is your submission script for rep 1
+│   ├── GlyT2_apo_POPC_CHOL_r1.mdp          # this is your mdp file for rep 1
+│   ├── GlyT2_apo_POPC_CHOL_r1.ndx          # this is your index file for rep 1
+│   ├── GlyT2_apo_POPC_CHOL_r1_start.gro    # this is your starting coordinate file for rep 1
+│   └── GlyT2_apo_POPC_CHOL_r1.top          # this is your top file for rep 1
+|
+├── r2                                      # this folder contains replicate 2,
+|   |                                       #     the starting files are the same
+│   ├── GlyT2_apo_POPC_CHOL_r2              # this is your submission script for rep 2
+│   ├── GlyT2_apo_POPC_CHOL_r2.mdp          # etc, etc, etc
 │   ├── GlyT2_apo_POPC_CHOL_r2.ndx
 │   ├── GlyT2_apo_POPC_CHOL_r2_start.gro
 │   └── GlyT2_apo_POPC_CHOL_r2.top
-├── r3
-│   ├── GlyT2_apo_POPC_CHOL_r3
-│   ├── GlyT2_apo_POPC_CHOL_r3.mdp
+|
+├── r3                                      # this folder contains replicate 3,
+|   |                                       #     the starting files are the same again
+│   ├── GlyT2_apo_POPC_CHOL_r3              # this is your submission script for rep 3
+│   ├── GlyT2_apo_POPC_CHOL_r3.mdp          # etc, etc, etc
 │   ├── GlyT2_apo_POPC_CHOL_r3.ndx
 │   ├── GlyT2_apo_POPC_CHOL_r3_start.gro
 │   └── GlyT2_apo_POPC_CHOL_r3.top
-└── run_template
-    ├── GlyT2_apo_POPC_CHOL_r1
+|
+└── _run_template                           # this is a backup replicate folder
+    |                                       # don't run any jobs in this folder
+    ├── GlyT2_apo_POPC_CHOL_r1              
     ├── GlyT2_apo_POPC_CHOL_r1.mdp
     ├── GlyT2_apo_POPC_CHOL_r1.ndx
     ├── GlyT2_apo_POPC_CHOL_r1_start.gro
