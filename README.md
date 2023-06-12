@@ -161,8 +161,8 @@ You submit a job by queueing the submission script.
 
 |Queueing system|Command|
 |--------|--------|
-| PBS queing system (gadi) |  `$ qsub the_name_of_your_submission_script` |
-| Slurm queing system (pawsey and UQ clusters) |  `$ sbatch the_name_of_your_submission_script` |
+| PBS queueing system (gadi) |  `$ qsub the_name_of_your_submission_script` |
+| Slurm queueing system (pawsey and UQ clusters) |  `$ sbatch the_name_of_your_submission_script` |
 
 If you don't get an error, it should be queued.  Then, go do it for the next replicate and do this again.
 
@@ -172,8 +172,8 @@ You can use these commands to check the status of all queued jobs.
 
 |Queueing system|Command|
 |--------|--------|
-| PBS queing system (gadi) |  `$ qstat` |
-| Slurm queing system (pawsey and UQ clusters) |  `$ squeue --me` |
+| PBS queueing system (gadi) |  `$ qstat` |
+| Slurm queueing system (pawsey and UQ clusters) |  `$ squeue --me` |
 
 You can always check the end of your gromacs log file to see how far your simulation has gotten, and how quickly it is running.   The queuing systems also generate error logs for every run.  On pbs systems, these will be called something like `systemname.e72234683`. On slurm systems these will be called something `slurm-83245234.out`.  If your job has stopped and you don't know why, read the most recent error log and see what happened.
 
