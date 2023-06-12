@@ -77,40 +77,42 @@ It should look something like this
 
 ./GlyT2_apo_POPC_CHOL
 |
-├── gromos54a7.ff                           # this is your forcefield folder
+├── gromos54a7.ff                           # this is your forcefield
 │   ├── example1.itp
 │   └── example2.itp
 |
-├── r1                                      # this folder contains replicate 1
-│   ├── GlyT2_apo_POPC_CHOL_r1              # this is your submission script for rep 1
-│   ├── GlyT2_apo_POPC_CHOL_r1.mdp          # this is your mdp file for rep 1
-│   ├── GlyT2_apo_POPC_CHOL_r1.ndx          # this is your index file for rep 1
-│   ├── GlyT2_apo_POPC_CHOL_r1_start.gro    # this is your starting coordinate file for rep 1
-│   └── GlyT2_apo_POPC_CHOL_r1.top          # this is your top file for rep 1
+├── r1                                      # replicate 1
+│   ├── GlyT2_apo_POPC_CHOL_r1              # submission script for rep1
+│   ├── GlyT2_apo_POPC_CHOL_r1.mdp          # mdp file for rep1
+│   ├── GlyT2_apo_POPC_CHOL_r1.ndx          # index file for rep1
+│   ├── GlyT2_apo_POPC_CHOL_r1_start.gro    # starting coordinates rep1
+│   └── GlyT2_apo_POPC_CHOL_r1.top          # top file for rep11
 |
-├── r2                                      # this folder contains replicate 2,
-|   |                                       #     the starting files are the same
-│   ├── GlyT2_apo_POPC_CHOL_r2              # this is your submission script for rep 2
+├── r2                                      # replicate 2,
+|   |                                       # starting files the same
+│   ├── GlyT2_apo_POPC_CHOL_r2              # submission script for rep2
 │   ├── GlyT2_apo_POPC_CHOL_r2.mdp          # etc, etc, etc
 │   ├── GlyT2_apo_POPC_CHOL_r2.ndx
 │   ├── GlyT2_apo_POPC_CHOL_r2_start.gro
 │   └── GlyT2_apo_POPC_CHOL_r2.top
 |
-├── r3                                      # this folder contains replicate 3,
-|   |                                       #     the starting files are the same again
-│   ├── GlyT2_apo_POPC_CHOL_r3              # this is your submission script for rep 3
+├── r3                                      # replicate 3,
+|   |                                       # starting files the same 
+│   ├── GlyT2_apo_POPC_CHOL_r3              # submission script for rep3
 │   ├── GlyT2_apo_POPC_CHOL_r3.mdp          # etc, etc, etc
 │   ├── GlyT2_apo_POPC_CHOL_r3.ndx
 │   ├── GlyT2_apo_POPC_CHOL_r3_start.gro
 │   └── GlyT2_apo_POPC_CHOL_r3.top
 |
-└── _run_template                           # this is a backup replicate folder
-    |                                       # don't run any jobs in this folder
+└── _run_template                           # backup replicate folder
+    |                                       # don't run any jobs
+    |                                       # in this folder
     ├── GlyT2_apo_POPC_CHOL_r1              
     ├── GlyT2_apo_POPC_CHOL_r1.mdp
     ├── GlyT2_apo_POPC_CHOL_r1.ndx
     ├── GlyT2_apo_POPC_CHOL_r1_start.gro
     └── GlyT2_apo_POPC_CHOL_r1.top
+
 ~~~
 
 ### Step two:  Copy the system to the supercomputer / cluster you wish to use
