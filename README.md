@@ -2,7 +2,7 @@
 
 Standard scripts, MDP files and other documentation for running MD simulations
 
-The most up to date version of this will always be hosted on github at [https://github.com/OMaraLab/MD_run_scripts](https://github.com/OMaraLab/MD_run_scripts).  This repository is previate, so you need to be logged in to github, and be a member of the omara organisation.
+The most up to date version of this will always be hosted on github at [https://github.com/OMaraLab/MD_run_scripts](https://github.com/OMaraLab/MD_run_scripts).  This repository is private, so you need to be logged in to github, and be a member of the omara organisation.
 
 ## Other resources
 
