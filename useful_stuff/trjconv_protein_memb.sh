@@ -1,6 +1,8 @@
 
 #!/bin/bash
 
+# this is an example of a script to process a trajectory into something easier to work with
+
 cd /path/to/system/prod/r1 # change to working direcotry of your production replicate
 
 mkdir trjconv  # make a directory where your trjconv steps will go
