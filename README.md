@@ -76,9 +76,11 @@ It should look something like this
 ~~~txt
 
 ./GlyT2_apo_POPC_CHOL
+|
 ├── gromos54a7.ff                           # this is your forcefield folder
 │   ├── example1.itp
 │   └── example2.itp
+|
 ├── r1                                      # this folder contains replicate 1
 │   ├── GlyT2_apo_POPC_CHOL_r1              # this is your submission script for rep 1
 │   ├── GlyT2_apo_POPC_CHOL_r1.mdp          # this is your mdp file for rep 1
