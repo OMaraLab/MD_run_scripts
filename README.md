@@ -41,6 +41,12 @@ Do not blindly choose an `.mdp` file.  Always check if it is appropriate to your
 * an example of a script for processing production for analysis, using `gmx trjconv`
 * an example of the scripts you might use to look at contact fractions in vmd
 
+## The most important thing
+
+**Q:** Hey I deleted a file on the supercomputer by mistake, how do I get it back
+**A:** Unless you are absurdly lucky, you probably can't.
+
+Be careful!  Only delete things when you are 100% sure you are done with them, and that you will never need them again.  Always double check your deletion commands before you use them and make sure they are going to do what you expect.  **Always remember: If you delete something and you don't have a backup, there is a good chance it is *gone!***
 
 ## How to get a job running on a computing cluster
 
