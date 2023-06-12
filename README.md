@@ -83,12 +83,13 @@ eg:  if I wanted to copy the system GlyT2_apo_POPC_CHOL from my local machine to
 
 Where you want to put it depends on which cluster you are using.  You will want to put it somewhere inside your user folder.  Make sure your files are structured logically, and that other people in our group can access them.
 
-|Cluster     | Cluster address | Typical path to an appropriate user folder   |
-|Bunya (RCC)      |`bunya.rcc.uq.edu.au`     |`/scratch/user/your_username/`   |
-|Wiener(RCC)      |`wiener.hpc.dc.uq.edu.au` |`/scratch/aibn/your_username/` |
-|Gadi (NCI)       |`gadi.nci.org.au`         |`/scratch/q95/your_username/`          |
-|Setonix (Pawsey) | `setonix.pawsey.org.au`  |`/scratch/pawsey0420/your_username/`   |
-|Topaz (Pawsey)   | `topaz.pawsey.org.au`    |`/group/pawsey0420/your_username/`   |
+| Cluster     |  Cluster address |  Typical path to an appropriate user folder   | 
+|--------|--------|--------| 
+| Bunya (RCC)      | `bunya.rcc.uq.edu.au`     | `/scratch/user/your_username/`   | 
+| Wiener(RCC)      | `wiener.hpc.dc.uq.edu.au` | `/scratch/aibn/your_username/` | 
+| Gadi (NCI)       | `gadi.nci.org.au`         | `/scratch/q95/your_username/`          | 
+| Setonix (Pawsey) |  `setonix.pawsey.org.au`  | `/scratch/pawsey0420/your_username/`   | 
+| Topaz (Pawsey)   |  `topaz.pawsey.org.au`    | `/group/pawsey0420/your_username/`   | 
 
 **Make sure you read the user guide for the cluster you are using.  Some folders are intended only for short term use!  Do not assume files on the clusters will remain there forever.**
 
@@ -96,11 +97,13 @@ Where you want to put it depends on which cluster you are using.  You will want 
 
 Log in to the cluster with ssh
 
-|Bunya (RCC)      |`$ ssh username@bunya.rcc.uq.edu.au`   |
-|Wiener(RCC)      |`$ ssh username@wiener.hpc.dc.uq.edu.au` |
-|Gadi (NCI)       |`$ ssh username@gadi.nci.org.au`         |
-|Setonix (Pawsey) |`$ ssh username@setonix.pawsey.org.au`   |
-|Topaz (Pawsey)   |`$ ssh username@topaz.pawsey.org.au`   |
+|Cluster|Command|
+|--------|--------|
+| Bunya (RCC)      | `$ ssh username@bunya.rcc.uq.edu.au`   |
+| Wiener(RCC)      | `$ ssh username@wiener.hpc.dc.uq.edu.au` |
+| Gadi (NCI)       | `$ ssh username@gadi.nci.org.au`         |
+| Setonix (Pawsey) | `$ ssh username@setonix.pawsey.org.au`   |
+| Topaz (Pawsey)   | `$ ssh username@topaz.pawsey.org.au`   |
 
 Go to the folder for your first replicate.  
 
@@ -112,8 +115,10 @@ Different clusters use
 
 submit your job by queueing the submission script
 
-|PBS queing system (gadi) | `$ qsub the_name_of_your_submission_script` |
-|Slurm queing system (pawsey and UQ clusters) | `$ sbatch the_name_of_your_submission_script` |
+|Queueing system|Command|
+|--------|--------|
+| PBS queing system (gadi) |  `$ qsub the_name_of_your_submission_script` | 
+| Slurm queing system (pawsey and UQ clusters) |  `$ sbatch the_name_of_your_submission_script` | 
 
 If you don't get an error, it should be queued.
 
@@ -121,8 +126,10 @@ Our submission scripts should run for a specified number of hours, after which t
 
 You can use these commands to check the status of all queued jobs.
 
-|PBS queing system (gadi) | `$ qstat` |
-|Slurm queing system (pawsey and UQ clusters) | `$ squeue --me` |
+|Queueing system|Command|
+|--------|--------|
+| PBS queing system (gadi) |  `$ qstat` | 
+| Slurm queing system (pawsey and UQ clusters) |  `$ squeue --me` | 
 
 You can always check the end of your gromacs log file to see how far your simulation has gotten, and how quickly it is running.   The queuing systems also generate error logs for every run.  On pbs systems, these will be called something like `systemname.e72234683`. On slurm systems these will be called something `slurm-83245234.out`.  If your job has stopped and you don't know why, read the most recent error log and see what happened.
 
