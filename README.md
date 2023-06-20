@@ -43,6 +43,8 @@ Do not blindly choose an `.mdp` file.  Always check if it is appropriate to your
 * an example of a script for processing production for analysis, using `gmx trjconv`
 * an example of the scripts you might use to look at contact fractions in vmd
 
+Because I always forget, on gadi, the command `nqstat -P q95` will list all jobs for all users in project q95
+
 ## The most important thing
 
 **Q:** Hey I deleted a file on the supercomputer by mistake, how do I get it back?
