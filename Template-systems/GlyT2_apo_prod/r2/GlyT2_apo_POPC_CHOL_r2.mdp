@@ -4,7 +4,7 @@ constraints         =  all-bonds
 
 integrator          =  md
 dt                  =  0.002      ; ps !
-nsteps              =  250000000      ; 500 ns
+nsteps              =  -1 ; run until stop 
 nstcomm             =  10
 nstxout             =  5000
 nstvout             =  50000
