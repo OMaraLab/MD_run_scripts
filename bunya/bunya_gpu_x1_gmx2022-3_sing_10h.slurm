@@ -9,10 +9,6 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --account=a_omara
 
-# THIS WAS ADA TEST 01       
-# GOAL:  SEE IF IT WORKS
-# UPDATE:  It did! 51.096  ns/day with a 237498 particle gromos 54a7 system
-# I've done some more benchmarking but everything else has been worse
 
 ## General-purpose resubmit script for GROMACS jobs on Bunya GPU
 # Uses Gromacs 2022.3 nvidia singularity container
@@ -32,7 +28,7 @@
 ## IMPORTANT:  YOU NEED TO HAVE ACCESS TO A GROMACS SINGULARITY CONTAINER.  
 ##             WE DON'T HAVE ONE IN A SHARED PLACE YET, HOPEFULLY SOON
 ##             ASK ME OR HEATHER FOR A COPY, AND EDIT THE PATH IN THE 
-##             various lines that reference singularity (lines 56, 60, 61 or 66)
+##             various lines that reference singularity
 
 
 #####  SETUP ENVIRONMENT  #####
@@ -52,9 +48,16 @@ errexit ()
     fi
 }
 
+#### EDIT THIS LINE TO REFERENCE AN APPLICABLE TEMP FOLDER
+
 export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 
 
+# During preliminary benchmarking these settings yielded 51.096  ns/day with a 237498 particle gromos 54a7 system
+# I've done some very preliminary benchmarking testing other configurations, but so far everything else has been worse
+# This is "good enough to use", but not "we have determined the optimum performance"
+
+# Should I rework this to make the path to the singularity container it's won variable/  Is that "easier for users" or is it "letting in the complexity demon"?
 
 GMX='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx'
 GMXMDRUN='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -pme cpu -dlb yes -maxh 9.95'
