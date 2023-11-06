@@ -12,6 +12,8 @@
 
 ## General-purpose resubmit script for GROMACS jobs on Wiener
 
+## This script uses 2 GPUS and 24 CPUS, which is typically NOT OPTIMAL for a united atom system
+
 ## IMPORTANT:  MAKE SURE YOU BENCHMARK.  MY PERFORMANCE WITH THIS SCRIPT HAS BEEN VERY SPOTTY RECENTLY
 
 ## this runs jobs in four hour blocks with checkpinting and resubmission, 
