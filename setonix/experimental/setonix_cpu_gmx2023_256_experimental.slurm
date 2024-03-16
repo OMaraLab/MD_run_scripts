@@ -8,7 +8,7 @@
 #SBATCH --time=12:00:00
 
 echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
-echo "CLUSTERID=SETONIX GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
+echo "CLUSTERID=SETONIX-CPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 
 module load gromacs/2023
