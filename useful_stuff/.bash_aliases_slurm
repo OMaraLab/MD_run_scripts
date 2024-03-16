@@ -51,33 +51,25 @@ cleanout() {
   fi
 }
 
-alias cleanoe="cleanout"# if you use the command to sort pbs output files, run the command to sort slurm output files
+alias cleanoe="cleanout" # if you use the command to sort pbs output files, run the command to sort slurm output files
 
 
 parselog() {
-# Find all .log files in the current working directory
+# Recursively find all *.log files in the current working directory
 # for each, save file path,final step reached, and ns/day to ./status.txt
-  status_file="status.txt"
-    if [[ -f "$status_file" ]]; then
-       cat "$status_file" >> "${status_file%.*}_prev.${status_file##*.}"
-       rm "$status_file"
-    fi
+# good for checking the status of everything in a project really quickly, or for compiling benchmarking data
 
+  status_file="status.txt"
   touch $status_file
 
-
-
-  #  if [  ! -e "$status_file" ]; then
-  #    echo "couldn't write to ${status_file}, instead writing to ~/jobstatus.txt"
-  #    status_file="~/jobstatus.txt"
-  #    touch $status_file  
-  #  fi
-  #
   echo "================================" >> $status_file
   date >> $status_file
   echo "================================" >> $status_file
 
-  for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do
+#  for file in $(find . -type f -name '*wet_EQ.log' | sort -k 1) ;do
+
+  for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do # excludes log files with names like "03*.log" which are usually energy minimisation or eq
+
     echo "Processing $file"
 
     # Add the file name to the status file
@@ -106,52 +98,51 @@ parselog() {
     echo >> $status_file
     echo >> $status_file
   done
-
-parsestatus $status_file
-
 }
 
-parsestatus () {
-# parse a status.txt into a csv.
-# takes the file to be parsed as an argument
+# parsestatus () {
+  # doesn't work
+  
+# # parse a status.txt into a csv.
+# # takes the file to be parsed as an argument
 
-    input_file=$1
-    output_file="status.csv"
-    date_line=""
+#     input_file=$1
+#     output_file="status.csv"
+#     date_line=""
 
-    # Remove the output file if it already exists
-    rm -f "$output_file"
+#     # Remove the output file if it already exists
+#     rm -f "$output_file"
 
-    echo 'date,fname,nsteps,ns,ns per day,hour per ns' >> "$output_file"
+#     echo 'date,fname,nsteps,ns,ns per day,hour per ns' >> "$output_file"
 
-    # Read the input file line by line
-    while IFS= read -r line; do
-        # Check if the line starts with "./"
-        if [[ $line == ./* ]]; then
-            # Extract the filename
-            fname=${line#./}
+#     # Read the input file line by line
+#     while IFS= read -r line; do
+#         # Check if the line starts with "./"
+#         if [[ $line == ./* ]]; then
+#             # Extract the filename
+#             fname=${line#./}
 
-            # Read the next six lines (including empty lines)
-            IFS= read -r blank_line
-            IFS= read -r headline1
-            IFS= read -r step_line
-            IFS= read -r blank_line
-            IFS= read -r headline2
-            IFS= read -r perf_line
+#             # Read the next six lines (including empty lines)
+#             IFS= read -r blank_line
+#             IFS= read -r headline1
+#             IFS= read -r step_line
+#             IFS= read -r blank_line
+#             IFS= read -r headline2
+#             IFS= read -r perf_line
 
-            # Extract the values from the lines
-            step=$(echo "$step_line" | awk '{print $1 "," $2}')
-            perf=$(echo "$perf_line" | awk '{print $2 "," $3}')
+#             # Extract the values from the lines
+#             step=$(echo "$step_line" | awk '{print $1 "," $2}')
+#             perf=$(echo "$perf_line" | awk '{print $2 "," $3}')
 
-            # Append the values to the output file as CSV
-            echo "$date_line,$fname,$step,$perf" >> "$output_file"
-        fi
+#             # Append the values to the output file as CSV
+#             echo "$date_line,$fname,$step,$perf" >> "$output_file"
+#         fi
 
-        # Check if the line starts with M, T, W, F, or S
-        if [[ $line =~ ^[MTWFS] ]]; then
-            date_line=$line
-        fi
+#         # Check if the line starts with M, T, W, F, or S
+#         if [[ $line =~ ^[MTWFS] ]]; then
+#             date_line=$line
+#         fi
 
-    done < "$input_file"
+#     done < "$input_file"
 
-}
+# }

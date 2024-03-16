@@ -38,6 +38,54 @@ qwhich() {
 }
 
 
+}
+parselog() {
+# Recursively find all *.log files in the current working directory
+# for each, save file path,final step reached, and ns/day to ./status.txt
+# good for checking the status of everything in a project really quickly, or for compiling benchmarking data
+
+  status_file="status.txt"
+  touch $status_file
+
+  echo "================================" >> $status_file
+  date >> $status_file
+  echo "================================" >> $status_file
+
+#  for file in $(find . -type f -name '*wet_EQ.log' | sort -k 1) ;do
+
+  for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do # excludes log files with names like "03*.log" which are usually energy minimisation or eq
+
+    echo "Processing $file"
+
+    # Add the file name to the status file
+    echo $file >> $status_file
+    echo >> $status_file
+
+    # Get the last line that matches the pattern "Step           Time"
+    step_time_line=$(grep -nP 'Step\s+Time' $file | tail -1 | cut -d ":" -f1)
+    #echo $step_time_line
+    # Add the found line, and the next line, to the status file
+    #echo $(tail -2 $file | head -1) >> $status_file
+    if [ -n "$step_time_line" ]; then
+      sed -n "${step_time_line}p" $file >> $status_file
+      sed -n "$((${step_time_line}+1))p" $file  >> $status_file
+      echo >> $status_file
+    fi
+
+    # Get the last line that matches the pattern "Performance:"
+    #echo $perf_line
+    perf_line=$(grep -nP 'Performance:' $file | tail -1| cut -d ":" -f1)
+    # Add the found line, and the preceeding line, to the status file
+    if [ -n "$perf_line" ]; then
+      sed -n "$((${perf_line}-1))p" $file >> $status_file
+      sed -n "${perf_line}p" $file >> $status_file
+    fi
+    echo >> $status_file
+    echo >> $status_file
+  done
+}
+
+
 # cleanout:  changes \r (carriage return) to \n (newline) to make slurm-TKTKTK.out files easier to read on some ssh platforms
 alias cleanout="sed -i 's|\r|\n|g'" # clean output file carriage returns for readability
 
@@ -90,107 +138,50 @@ cleanout *.[oe][0-9]*
       # hence, for all *.[oe][0-9]* files in the working directory, change carriage returns to newlines.  
       # this makes files much more readable through some terminal platforms
 
-}
 
-parselog() {
-# Find all .log files in the current working directory
-# for each, save file path,final step reached, and ns/day to ./status.txt
-  status_file="status.txt"
-    if [[ -f "$status_file" ]]; then
-       cat "$status_file" >> "${status_file%.*}_prev.${status_file##*.}"
-       rm "$status_file"
-    fi
-
-  touch $status_file
+# parsestatus () {
+  # doesn't work
+# # parse a status.txt into a csv.
+# # takes the file to be parsed as an argument
 
 
+#     input_file=$1
+#     output_file="status.csv"
+#     date_line=""
 
-  #  if [  ! -e "$status_file" ]; then
-  #    echo "couldn't write to ${status_file}, instead writing to ~/jobstatus.txt"
-  #    status_file="~/jobstatus.txt"
-  #    touch $status_file  
-  #  fi
-  #
-  echo "================================" >> $status_file
-  date >> $status_file
-  echo "================================" >> $status_file
+#     # Remove the output file if it already exists
+#     rm -f "$output_file"
 
-  for file in $(find . -type f -name '*.log' -not -name '[0-9][0-9]*.log' | sort -k 1) ;do
-    echo "Processing $file"
+#     echo 'date,fname,nsteps,ns,ns per day,hour per ns' >> "$output_file"
 
-    # Add the file name to the status file
-    echo $file >> $status_file
-    echo >> $status_file
+#     # Read the input file line by line
+#     while IFS= read -r line; do
+#         # Check if the line starts with "./"
+#         if [[ $line == ./* ]]; then
+#             # Extract the filename
+#             fname=${line#./}
 
-    # Get the last line that matches the pattern "Step           Time"
-    step_time_line=$(grep -nP 'Step\s+Time' $file | tail -1 | cut -d ":" -f1)
-    #echo $step_time_line
-    # Add the found line, and the next line, to the status file
-    #echo $(tail -2 $file | head -1) >> $status_file
-    if [ -n "$step_time_line" ]; then
-      sed -n "${step_time_line}p" $file >> $status_file
-      sed -n "$((${step_time_line}+1))p" $file  >> $status_file
-      echo >> $status_file
-    fi
+#             # Read the next six lines (including empty lines)
+#             IFS= read -r blank_line
+#             IFS= read -r headline1
+#             IFS= read -r step_line
+#             IFS= read -r blank_line
+#             IFS= read -r headline2
+#             IFS= read -r perf_line
 
-    # Get the last line that matches the pattern "Performance:"
-    #echo $perf_line
-    perf_line=$(grep -nP 'Performance:' $file | tail -1| cut -d ":" -f1)
-    # Add the found line, and the preceeding line, to the status file
-    if [ -n "$perf_line" ]; then
-      sed -n "$((${perf_line}-1))p" $file >> $status_file
-      sed -n "${perf_line}p" $file >> $status_file
-    fi
-    echo >> $status_file
-    echo >> $status_file
-  done
+#             # Extract the values from the lines
+#             step=$(echo "$step_line" | awk '{print $1 "," $2}')
+#             perf=$(echo "$perf_line" | awk '{print $2 "," $3}')
 
-parsestatus $status_file
+#             # Append the values to the output file as CSV
+#             echo "$date_line,$fname,$step,$perf" >> "$output_file"
+#         fi
 
-}
+#         # Check if the line starts with M, T, W, F, or S
+#         if [[ $line =~ ^[MTWFS] ]]; then
+#             date_line=$line
+#         fi
 
-parsestatus () {
-# parse a status.txt into a csv.
-# takes the file to be parsed as an argument
+#     done < "$input_file"
 
-
-    input_file=$1
-    output_file="status.csv"
-    date_line=""
-
-    # Remove the output file if it already exists
-    rm -f "$output_file"
-
-    echo 'date,fname,nsteps,ns,ns per day,hour per ns' >> "$output_file"
-
-    # Read the input file line by line
-    while IFS= read -r line; do
-        # Check if the line starts with "./"
-        if [[ $line == ./* ]]; then
-            # Extract the filename
-            fname=${line#./}
-
-            # Read the next six lines (including empty lines)
-            IFS= read -r blank_line
-            IFS= read -r headline1
-            IFS= read -r step_line
-            IFS= read -r blank_line
-            IFS= read -r headline2
-            IFS= read -r perf_line
-
-            # Extract the values from the lines
-            step=$(echo "$step_line" | awk '{print $1 "," $2}')
-            perf=$(echo "$perf_line" | awk '{print $2 "," $3}')
-
-            # Append the values to the output file as CSV
-            echo "$date_line,$fname,$step,$perf" >> "$output_file"
-        fi
-
-        # Check if the line starts with M, T, W, F, or S
-        if [[ $line =~ ^[MTWFS] ]]; then
-            date_line=$line
-        fi
-
-    done < "$input_file"
-
-}
+# }
