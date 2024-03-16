@@ -26,6 +26,7 @@
 echo "CLUSTERID=GADI-gpuvolta" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 module load singularity
+module list
 
 GMX='singularity run --nv /g/data/q95/SHARED/gromacs_2023.sif gmx'
 GMXMDRUN=GMXMDRUN='singularity run --nv /g/data/q95/SHARED/gromacs_2023.sif gmx mdrun -maxh 3.95'
