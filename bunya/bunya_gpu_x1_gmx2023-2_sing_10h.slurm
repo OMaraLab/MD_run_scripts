@@ -39,7 +39,9 @@
 #### EDIT THIS LINE TO REFERENCE AN APPLICABLE TEMP FOLDER
 ### IF YOU ARE NOT ADA, YOUR TMPDIR SHOULD NOT BE IN ADA'S USER FOLDER
 
+
 echo "CLUSTERID=BUNYA-A100-GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
+module list
 
 export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 
