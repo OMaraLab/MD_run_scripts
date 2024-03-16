@@ -10,8 +10,10 @@
 #SBATCH --account=a_omara
 
 
+
 ## General-purpose resubmit script for GROMACS jobs on Bunya GPU
 # Uses Gromacs 2022.3 nvidia singularity container
+# Reference:  https://catalog.ngc.nvidia.com/orgs/hpc/containers/gromacs
 
 ## this runs jobs in four hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
@@ -30,6 +32,16 @@
 ##             ASK ME OR HEATHER FOR A COPY, AND EDIT THE PATH IN THE 
 ##             various lines that reference singularity
 
+### ========================================================================
+### ===== IMPORTANT ========================================================
+### ========================================================================
+
+#### EDIT THIS LINE TO REFERENCE AN APPLICABLE TEMP FOLDER
+### IF YOU ARE NOT ADA, YOUR TMPDIR SHOULD NOT BE IN ADA'S USER FOLDER
+
+echo "CLUSTERID=BUNYA-A100-GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
+
+export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 
 #####  SETUP ENVIRONMENT  #####
 
@@ -48,24 +60,13 @@ errexit ()
     fi
 }
 
-#### EDIT THIS LINE TO REFERENCE AN APPLICABLE TEMP FOLDER
-
-export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 
 
-# During preliminary benchmarking these settings yielded 51.096  ns/day with a 237498 particle gromos 54a7 system
-# I've done some very preliminary benchmarking testing other configurations, but so far everything else has been worse
-# This is "good enough to use", but not "we have determined the optimum performance"
-
-# Should I rework this to make the path to the singularity container it's won variable/  Is that "easier for users" or is it "letting in the complexity demon"?
-
-GMX='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx'
-GMXMDRUN='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -pme cpu -dlb yes -maxh 9.95'
+GMX='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx'
+GMXMDRUN=GMXMDRUN='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -pme cpu -dlb yes -maxh 9.95'
 
 ### Alternate GMXMDRUN command that does nb calcs on the GPU
 ### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 
-
-# GMXMDRUN='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -nb gpu -dlb yes -maxh 9.95'
 
 #####  START MD WITH A GROMPP  #####
 
@@ -73,13 +74,11 @@ GMXMDRUN='singularity run --nv /scratch/user/uqhaitke/containers/gromacs_2022.3.
 if [ ! -f ${SLURM_JOB_NAME}.tpr ]; then
     $GMX grompp -f ${SLURM_JOB_NAME}.mdp -c ${SLURM_JOB_NAME}_start.gro -o ${SLURM_JOB_NAME}.tpr -p ${SLURM_JOB_NAME}.top  -n ${SLURM_JOB_NAME}.ndx -maxwarn 2 &> ${SLURM_JOB_NAME}_grompp_${SLURM_JOB_ID}.txt
 fi
-
 #####  RUN MD FOR 9.95 HOURS  #####
 
 $GMXMDRUN -v -deffnm ${SLURM_JOB_NAME} -cpi ${SLURM_JOB_NAME}.cpt || errexit
 
 #####  CHECK IF JOB IS DONE; IF NOT DONE RESUBMIT THIS SCRIPT  #####
-
 
 # Check the log file for the number of steps completed
 steps_done=`perl -n -e'/Statistics over (\d+) steps using (\d+) frames/ && print $1' ${SLURM_JOB_NAME}.log`
@@ -98,9 +97,6 @@ sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
 
 ## backup logfile for debugging
 
-cp ${SLURM_JOB_NAME}.log lastlog.txt
-
 echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
-echo "CLUSTERID=BUNYA A100 GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 #####  END  #####
