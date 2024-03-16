@@ -12,7 +12,10 @@ echo "CLUSTERID=SETONIX-CPU" # print which cluster was used, so if a system is r
 
 
 module load gromacs/2023
+module list
+
 #export GMX_MAXBACKUP=-1
+
 
 # Temporal workaround for avoiding Slingshot issues on shared nodes:
 export FI_CXI_DEFAULT_VNI=$(od -vAn -N4 -tu < /dev/urandom)
