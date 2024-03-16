@@ -81,6 +81,16 @@ material change specular CoolWater 0.87
 material change shininess CoolWater 0.85
 material change opacity CoolWater 0.11
 
+
+#Try making a second coolwater that I can use as a transparent material that doesn't change the colour the way Glass does
+material add HardWater
+material change ambient HardWater 0.30
+material change diffuse HardWater 1.00
+material change specular HardWater 0.50
+material change shininess HardWater 0.80
+material change opacity HardWater 0.2
+material change transmode HardWater 1
+
 # turn on lights 0 and 1
 light 0 on
 light 1 on
@@ -156,3 +166,10 @@ material change specular Smog 0.000000
 material change diffuse Smog 0.000000
 material change shininess Smog 0.000000
 material change opacity Smog 1.000000
+
+
+after_idle {
+
+  color Type C silver
+
+}
