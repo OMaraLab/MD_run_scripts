@@ -36,7 +36,6 @@ Do not blindly choose an `.mdp` file.  Always check if it is appropriate to your
 
 `useful_stuff/` contains several documents that are generally useful, including:
 
-* a barebones guide to setting up a workstation
 * a `.vmdrc` file you can use to set up a good default vmd configuration.
 * a tutorial for generic protein analysis
 * `.bash_aliases` files that contain settings that are useful when working with pbs or slurm clusters.
