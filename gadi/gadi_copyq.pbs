@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -P q95
+#PBS -q copyq
+#PBS -l walltime=10:00:00
+#PBS -l mem=32GB
+#PBS -l jobfs=16000MB
+#PBS -l ncpus=1
+#PBS -l wd
+#PBS -l storage=scratch/q95+gdata/q95+massdata/q95
+#PBS -r y
+
+
+# fetch a file from mdss
+
+# mdss -P q95 get path/to/mdss/file.tar path/to/scratch/file.tar
+
+# send a file to mdss
+
+# mdss -P q95 put path/to/scratch/file.tar path/to/mdss/file.tar
