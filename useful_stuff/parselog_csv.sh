@@ -16,9 +16,9 @@ parselog_csv() {
     echo "Warning: output file $csv already exists"
     echo "appending data to the end of $csv"
     echo "You may wish to check your data"
-    echo "DUMMY,DUMMY,DUMMY,DUMMY,DUMMY,DUMMY,DUMMY," >> $csv
+    echo "DUMMY,DUMMY,DUMMY,DUMMY,DUMMY,DUMMY,DUMMY" >> $csv
   else
-    echo "File,Date,Time,Step,Time(ps),(ns/day),(hour/ns)," >> $csv
+    echo "File,Date,Time,Step,Time(ps),(ns/day),(hour/ns)" >> $csv
   fi
   touch $status_file
 
@@ -64,7 +64,7 @@ parselog_csv() {
     fi
     echo >> $status_file
     echo >> $status_file
-    csv_line=$( echo "$file $now $foo $bar " | sed 's/ \{1,\}/,/g')
+    csv_line=$( echo "$file $now $foo $bar" | sed 's/ \{1,\}/,/g')
     echo $csv_line >> $csv
   done
 }
