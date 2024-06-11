@@ -18,7 +18,7 @@ parselog_csv() {
     echo "You may wish to check your data"
     echo "DUMMY,DUMMY,DUMMY,DUMMY,DUMMY,DUMMY,DUMMY" >> $csv
   else
-    echo "File,Date,Time,Step,Time(ps),(ns/day),(hour/ns)" >> $csv
+    echo "File,Parse Date,Parse Time,Final Step,Simulation Time(ps),(ns/day),(hour/ns)" >> $csv
   fi
   touch $status_file
 
