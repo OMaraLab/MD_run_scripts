@@ -64,7 +64,7 @@ errexit ()
 
 
 GMX='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx'
-GMXMDRUN='srun singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -pme cpu -dlb yes -maxh 9.95'
+GMXMDRUN='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -pme cpu -dlb yes -maxh 9.95'
 
 ### Alternate GMXMDRUN command that does nb calcs on the GPU
 ### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 

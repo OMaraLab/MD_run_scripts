@@ -67,7 +67,7 @@ export OMP_NUM_THREADS=48
 
 
 GMX='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx'
-GMXMDRUN='srun singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx mdrun -pin on -pme cpu -dlb yes -ntomp 48 -maxh 9.95'
+GMXMDRUN='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx mdrun -pin on -pme cpu -dlb yes -ntomp 48 -maxh 9.95'
 
 ### Alternate GMXMDRUN command that does nb calcs on the GPU
 ### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 
