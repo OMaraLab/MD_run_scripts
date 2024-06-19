@@ -15,7 +15,7 @@
 # Uses Gromacs 2022.3 nvidia singularity container
 # Reference:  https://catalog.ngc.nvidia.com/orgs/hpc/containers/gromacs
 
-## this runs jobs in four hour blocks with checkpinting and resubmission, 
+## this runs jobs in ten hour blocks with checkpinting and resubmission, 
 ## edit $GMXMDRUN to vary the runtime
 ## nsteps is set in the mdp
 ## Starting structure, .top, .ndx and .mdp should have the same name as the
@@ -32,17 +32,16 @@
 ##             ASK ME OR HEATHER FOR A COPY, AND EDIT THE PATH IN THE 
 ##             various lines that reference singularity
 
+echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
+echo "CLUSTERID=BUNYA-A100-GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
+module list
+
 ### ========================================================================
 ### ===== IMPORTANT ========================================================
 ### ========================================================================
 
 #### EDIT THIS LINE TO REFERENCE AN APPLICABLE TEMP FOLDER
 ### IF YOU ARE NOT ADA, YOUR TMPDIR SHOULD NOT BE IN ADA'S USER FOLDER
-
-
-echo "CLUSTERID=BUNYA-A100-GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
-module list
-
 export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 
 #####  SETUP ENVIRONMENT  #####
@@ -65,7 +64,7 @@ errexit ()
 
 
 GMX='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx'
-GMXMDRUN=GMXMDRUN='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -pme cpu -dlb yes -maxh 9.95'
+GMXMDRUN='srun singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2023.sif gmx mdrun -ntmpi 4 -ntomp 8 -pin on -pme cpu -dlb yes -maxh 9.95'
 
 ### Alternate GMXMDRUN command that does nb calcs on the GPU
 ### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 
@@ -93,12 +92,5 @@ if (( steps_done < steps_wanted )); then
     sbatch ${SLURM_JOB_NAME}
 fi
 
-## clean up linebreaks in output file
-
-sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
-
-## backup logfile for debugging
-
-echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
 
 #####  END  #####

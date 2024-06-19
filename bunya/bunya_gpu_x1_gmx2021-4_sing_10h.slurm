@@ -9,6 +9,11 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --account=a_omara
 
+#####################################   IMPORTANT   #####################################
+## ONLY USE THIS SCRIPT IF YOU HAVE A SPECIFIC REASON TO USE GMX 2021.4                    
+## IF YOU DO NOT SPECIFICALLY REQUIRE GMX 2021.4 YOU SHOULD USE THE SCRIPT FOR GMX 2023.2
+#########################################################################################
+
 ## General-purpose resubmit script for GROMACS jobs on Bunya GPU
 # Uses Gromacs 2021.4 nvidia singularity container
 
@@ -29,6 +34,9 @@
 ##             ASK ME OR HEATHER FOR A COPY, AND EDIT THE PATH IN THE 
 ##             various lines that reference singularity (lines 56, 60, 61 or 66)
 
+echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
+echo "CLUSTERID=BUNYA A100 GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
+
 
 #####  SETUP ENVIRONMENT  #####
 
@@ -47,14 +55,19 @@ errexit ()
     fi
 }
 
-# srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l 
+### ========================================================================
+### ===== IMPORTANT ========================================================
+### ========================================================================
+
+#### EDIT THIS LINE TO REFERENCE AN APPLICABLE TEMP FOLDER
+### IF YOU ARE NOT ADA, YOUR TMPDIR SHOULD NOT BE IN ADA'S USER FOLDER
 
 export SINGULARITY_TMPDIR=/scratch/user/uqadaqu1/tmp/ 
 export OMP_NUM_THREADS=48
 
 
 GMX='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx'
-GMXMDRUN='singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx mdrun -pin on -pme cpu -dlb yes -ntomp 48 -maxh 9.95'
+GMXMDRUN='srun singularity run --nv /scratch/user/uqadaqu1/containers/gromacs_2021.4.sif gmx mdrun -pin on -pme cpu -dlb yes -ntomp 48 -maxh 9.95'
 
 ### Alternate GMXMDRUN command that does nb calcs on the GPU
 ### preliminary benchmarking suggests it's either equivalent or slightly slower for these systems 
@@ -86,15 +99,6 @@ if (( steps_done < steps_wanted )); then
     sbatch ${SLURM_JOB_NAME}
 fi
 
-## clean up linebreaks in output file
 
-sed -i 's|\r|\n|g' slurm-${SLURM_JOB_ID}.out
-
-## backup logfile for live debugging
-
-cp ${SLURM_JOB_NAME}.log lastlog.txt
-
-echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
-echo "CLUSTERID=BUNYA A100 GPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 #####  END  #####
