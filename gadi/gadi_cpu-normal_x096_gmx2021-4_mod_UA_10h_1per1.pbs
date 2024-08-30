@@ -29,7 +29,7 @@
 #
 # or:
 #
-#   A .tpr file with filename :             <SYSTEMNAME>.top
+#   A .tpr file with filename :             <SYSTEMNAME>.tpr
 #
 #
 #   Using PME with a 220k system, my initial benchmarking suggests ~62 ns/day with 96 cores

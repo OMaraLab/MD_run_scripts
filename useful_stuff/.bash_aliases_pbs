@@ -38,7 +38,7 @@ qwhich() {
 }
 
 
-}
+
 parselog() {
 # Recursively find all *.log files in the current working directory
 # for each, save file path,final step reached, and ns/day to ./status.txt
@@ -138,6 +138,7 @@ cleanout *.[oe][0-9]*
       # hence, for all *.[oe][0-9]* files in the working directory, change carriage returns to newlines.  
       # this makes files much more readable through some terminal platforms
 
+}
 
 # parsestatus () {
   # doesn't work
