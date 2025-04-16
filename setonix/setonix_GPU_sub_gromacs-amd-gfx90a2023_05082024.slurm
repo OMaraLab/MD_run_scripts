@@ -44,7 +44,7 @@ chmod +x ./select_gpu
 
 #GMX='singularity exec -B <moduleDir>/99-shpc.sh:/.singularity.d/env/99-shpc.sh <container> gmx "$@"'
 GMX='gmx_mpi'  # srun -l -u -c 8 
-GMXMDRUN=" srun -N1 -n 1 -c 8 --gres=gpu:1 --gpus-per-task=1 --gpu-bind=closest $GMX -u -c 8 mdrun -nb gpu -pme gpu -pin on -maxh 9.95" # -ntmpi 1 (include in mdrun with multiple GPUs)
+GMXMDRUN=" srun -N1 -n 1 -c 8 -u --gres=gpu:1 --gpus-per-task=1 --gpu-bind=closest $GMX mdrun -nb gpu -pme gpu -pin on -maxh 9.95" # -ntmpi 1 (include in mdrun with multiple GPUs)
 
 
 # Define error function so we can see the error code given when something
