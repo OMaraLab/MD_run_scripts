@@ -10,6 +10,8 @@
 #SBATCH --account=a_omara
 
 
+## THIS IS OLD AND NEEDS TO BE UPDATED
+
 
 ## General-purpose resubmit script for GROMACS jobs on Bunya GPU
 # Uses Gromacs 2022.3 nvidia singularity container
