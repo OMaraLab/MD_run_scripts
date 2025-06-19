@@ -1,0 +1,32 @@
+#!/bin/bash -l
+
+#SBATCH --job-name=1us_test_h100
+#SBATCH --output=1us_test_h100.out
+#SBATCH --time=00:05:00
+#SBATCH --partition=gpu_cuda
+#SBATCH --qos=gpu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=64
+#SBATCH --mem=64G
+#SBATCH --gres=gpu:nvidia_a100_80gb_pcie_1g.10gb:1
+#SBATCH --constraint=cuda10gb
+#SBATCH --account=a_omara
+
+# Load compilers and tools
+module load gcc/11.3.0
+module load cmake/3.24.3-gcccore-11.3.0
+module load python/3.11.3-gcccore-12.3.0
+
+# Source relevant gromacs installation
+source /scratch/project/omara_scratch/gromacs/gromacs_2024.3_h100/bin/GMXRC
+
+
+# grompp and mdrun for just a 5 minute benchmark in this case
+
+gmx grompp -f 1us_prod.mdp -r prod_cancer_R1.gro -c prod_cancer_R1.gro -p cancer_R1.top -n cancer_R1.ndx -o 1us_test.tpr -maxwarn 2
+
+gmx mdrun -v -deffnm 1us_test -nb gpu -bonded gpu -ntmpi 32 -ntomp 2 -maxh 0.08
+
+# I would normally manually define -dd (domain decomposion layout) and -dds (allowed domain scaling) to ensure correct match of domain decomposition boxes to MPI ranks
+# In general, more ranks with less threads per rank is more efficient and allows better scaling, although GPU's can have odd behaviour
