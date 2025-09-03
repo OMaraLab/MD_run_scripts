@@ -13,11 +13,7 @@ echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmar
 echo "CLUSTERID=SETONIX-CPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
 # Load modules and switch to 2024 Pawsey environment to access custom GROMACS compile
-module unload gcc-native/14.2
-module switch pawseyenv/2025.08 pawseyenv/2024.05
-module load gcc/12.2.0
-module load libfabric/1.15.2.0
-module load gromacs/2023.3-mx33m5h
+module load gromacs/2023.3-y2zeetn # 2025.08 equivalent to gromacs/2023.3-mx33m5h from 2024 Pawsey environment
 module list
 
 export OMP_NUM_THREADS=2 # explicitly specify for GROMACS
