@@ -12,7 +12,7 @@
 echo $SLURM_JOB_NODELIST  # print node id to the end of output file for benchmarking / identifying troublesome nodes
 echo "CLUSTERID=SETONIX-CPU" # print which cluster was used, so if a system is run on multiple systems I can separate the log files for benchmarking
 
-# Load modules and switch to 2024 Pawsey environment to access custom GROMACS compile
+# Load modules
 module load gromacs/2023.3-y2zeetn # 2025.08 equivalent to gromacs/2023.3-mx33m5h from 2024 Pawsey environment
 module list
 
