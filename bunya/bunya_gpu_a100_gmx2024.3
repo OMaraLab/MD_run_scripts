@@ -1,13 +1,13 @@
 #!/bin/bash -l
 
-#SBATCH --job-name=1us_test_a100
-#SBATCH --output=1us_test_a100.out
+#SBATCH --job-name=prod
+#SBATCH --output=prod
 #SBATCH --time=00:05:00
 #SBATCH --partition=gpu_cuda
-#SBATCH --qos=gpu
+#SBATCH --qos=mig
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=64
+#SBATCH --cpus-per-task=16
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:nvidia_a100_80gb_pcie_1g.10gb:1
 #SBATCH --constraint=cuda10gb
@@ -24,9 +24,9 @@ source /scratch/project/omara_scratch/gromacs/gromacs_2024.3_a100/bin/GMXRC
 
 # grompp and mdrun for just a 5 minute benchmark in this case
 
-gmx grompp -f 1us_prod.mdp -r prod_cancer_R1.gro -c prod_cancer_R1.gro -p cancer_R1.top -n cancer_R1.ndx -o 1us_test.tpr -maxwarn 2
+gmx grompp -f prod.mdp -r prod_start.gro -c prod_start.gro -p prod.top -n prod.ndx -o prod.tpr -maxwarn 2
 
-gmx mdrun -v -deffnm 1us_test -nb gpu -bonded gpu -ntmpi 32 -ntomp 2 -maxh 0.08
+gmx mdrun -v -deffnm prod -nb gpu -bonded gpu -ntmpi 1 -ntomp 16 -maxh 0.08
 
-# I would normally manually define -dd (domain decomposion layout) and -dds (allowed domain scaling) to ensure correct match of domain decomposition boxes to MPI ranks
-# In general, more ranks with less threads per rank is more efficient and allows better scaling, although GPU's can have odd behaviour
+# Do some benchmarking to get best speeds and GPU utilisation by changing -ntomp (some good performance can be achieved with even 2 cores and 1 GPU slice) and if needed, -ntmpi
+# GPU performance varies significantly per GPU, per system, per configuration
