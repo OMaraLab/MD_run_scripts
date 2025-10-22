@@ -30,7 +30,7 @@ mkdir clean/tpr
 mkdir trjconv
 cp -r $path/gromos54a7_atb.ff clean/
 
-GMX_MAXBACKUP=-1
+export GMX_MAXBACKUP=-1
 
 function run_trjconv() {
 
@@ -43,15 +43,15 @@ function run_trjconv() {
     # often you might wait until you have data locally before running this step
     
     while [ $i -le 3 ]; do
-        printf "1\n0\n" | GMX_MAXBACKUP=-1 $GMX trjconv -f  $path/${sys}/r${i}/hOCT1_${sys}*_r${i}.xtc -o trjconv/nojump.xtc -s clean/tpr/hOCT1_${sys}.tpr -dt 1 -tu ns -pbc nojump -center -n clean/ndx/hOCT1_${sys}.ndx -b 0 -e ${length}
-        printf "1\n0\n" | GMX_MAXBACKUP=-1 $GMX trjconv -f  trjconv/nojump.xtc -o trjconv/atom.xtc  -s clean/tpr/hOCT1_${sys}.tpr -pbc atom -center -n clean/ndx/hOCT1_${sys}.ndx
-        printf "1\n0\n" | GMX_MAXBACKUP=-1 $GMX trjconv -f  trjconv/atom.xtc -o clean/hOCT1_${sys}_r${i}_1ns.xtc  -s clean/tpr/hOCT1_${sys}.tpr -pbc mol -center -n clean/ndx/hOCT1_${sys}.ndx
-        printf "1\n0\n" | GMX_MAXBACKUP=-1 $GMX trjconv -f  trjconv/atom.xtc -o clean/hOCT1_${sys}_r${i}_start.gro  -s clean/tpr/hOCT1_${sys}.tpr -tu ns -pbc mol -center -n clean/ndx/hOCT1_${sys}.ndx -dump 0
-        printf "1\n0\n" | GMX_MAXBACKUP=-1 $GMX trjconv -f  trjconv/atom.xtc -o clean/hOCT1_${sys}_r${i}_end.gro  -s clean/tpr/hOCT1_${sys}.tpr -tu ns -pbc mol -center -n clean/ndx/hOCT1_${sys}.ndx -dump ${length}
+        printf "1\n0\n" |  $GMX trjconv -f  $path/${sys}/r${i}/hOCT1_${sys}*_r${i}.xtc -o trjconv/nojump.xtc -s clean/tpr/hOCT1_${sys}.tpr -dt 1 -tu ns -pbc nojump -center -n clean/ndx/hOCT1_${sys}.ndx -b 0 -e ${length}
+        printf "1\n0\n" |  $GMX trjconv -f  trjconv/nojump.xtc -o trjconv/atom.xtc  -s clean/tpr/hOCT1_${sys}.tpr -pbc atom -center -n clean/ndx/hOCT1_${sys}.ndx
+        printf "1\n0\n" |  $GMX trjconv -f  trjconv/atom.xtc -o clean/hOCT1_${sys}_r${i}_1ns.xtc  -s clean/tpr/hOCT1_${sys}.tpr -pbc mol -center -n clean/ndx/hOCT1_${sys}.ndx
+        printf "1\n0\n" |  $GMX trjconv -f  trjconv/atom.xtc -o clean/hOCT1_${sys}_r${i}_start.gro  -s clean/tpr/hOCT1_${sys}.tpr -tu ns -pbc mol -center -n clean/ndx/hOCT1_${sys}.ndx -dump 0
+        printf "1\n0\n" |  $GMX trjconv -f  trjconv/atom.xtc -o clean/hOCT1_${sys}_r${i}_end.gro  -s clean/tpr/hOCT1_${sys}.tpr -tu ns -pbc mol -center -n clean/ndx/hOCT1_${sys}.ndx -dump ${length}
         i=$(( i + 1 ))
     done
 
-    GMX_MAXBACKUP=-1 $GMX trjcat -f  clean/hOCT1_${sys}_r1_1ns.xtc clean/hOCT1_${sys}_r2_1ns.xtc clean/hOCT1_${sys}_r3_1ns.xtc -o clean/hOCT1_${sys}_cat_1ns.xtc -cat
+    $GMX trjcat -f  clean/hOCT1_${sys}_r1_1ns.xtc clean/hOCT1_${sys}_r2_1ns.xtc clean/hOCT1_${sys}_r3_1ns.xtc -o clean/hOCT1_${sys}_cat_1ns.xtc -cat
 
 }
 
