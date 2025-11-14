@@ -17,14 +17,7 @@ module load libfabric/1.15.2.0
 module load gromacs/2023.3-mx33m5h
 
 GMX='gmx_mpi'
-#GMXMDRUN='srun -n 242 -m block:block:block gmx_mpi mdrun -ntomp 2 -maxh 23.95 -dd 11 11 2' #535.179ns/day at 39.15% efficiency
-GMXMDRUN='srun -n 484 -m block:block:block gmx_mpi mdrun -ntomp 2 -pin on -maxh 0.08 -dd 11 11 4' # estimating 991.921ns/day at 39.25% efficiency 
-
-# expected cost for 15us
-# normally system with 242 CPUs production run at ~535 ns/day, so if we multiply by 1.854 (per scaling seen in tests) we should get 991.9 ns/day
-#-n 128: 15000/308 = 48.7 days = 1169 hours -> 299,264 SUs (exlusive memory)
-#-n 242: 15000/535 = 28.0 days = 673 hours -> 344,576 SUs (exlusive memory) = total 1,033,728 SUs for 3 replicates
-#-n 484: 15000/992 = 15.0 days = 360 hours -> 368,640 SUs (exlusive memory) = total 1,105,920 SUs for 3 replicates
+GMXMDRUN='srun -n 484 -m block:block:block gmx_mpi mdrun -ntomp 2 -pin on -maxh 0.08 -dd 11 11 4'
 
 errexit ()
 
