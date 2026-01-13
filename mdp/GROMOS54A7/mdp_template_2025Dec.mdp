@@ -19,8 +19,10 @@ nstxout-compressed  =  50000
 ; this is 100ps. default value in the Gromos 54a7 paper is 2ps, but the timescales were much shorter when that paper was published. more frequent output gives bigger files.
 
 
-nstlist             =  20   
+verlet-buffer-tolerance = -1
+nstlist             =  10   
 ; frequency to update neighbour list. Gromacs manual says that a value of 20 or 40 gives the best performance on parallel simulations and GPUs
+nstenergy           =  1000 ; must be a multiple of nstlist
 
 ;; periodic boundary conditions
 ; ns_type       =  grid         ; only used in conjunction with pbc = xy
@@ -30,19 +32,19 @@ pbc             = xyz		; default for gromacs
 
 ;; electrostatics choose from PME or Reaction field. Gromos is parameterised for use with reaction field.
 ;; values for reaction field electrostatics in gromos 54a7
-coulombtype 	= reaction-field
-rcoulomb	= 1.4           ;from gromos paper
-rlist		= 1.4
-rvdw 		= 1.4
-epsilon-rf      = 61	        ; gromos paper uses 61. dielectric constant of water is 78.5
+;coulombtype 	= reaction-field
+;rcoulomb	= 1.4           ;from gromos paper
+;rlist		= 1.4
+;rvdw 		= 1.4
+;epsilon-rf      = 61	        ; gromos paper uses 61. dielectric constant of water is 78.5
 
 ;; values for PME electrostatics 
-;coulombtype         =  pme                   
-;rlist               =  1.4 	 ; rlist should be >= rcoulomb
-;rcoulomb            =  1.4                 
-;pme_order           =  4        ; GPU only supports 4
-;fourierspacing      =  0.16                       
-;rvdw                =  1.5      ;gromacs manual suggests 1.5 is better than 1.4 for good electrostatic calcs.
+coulombtype         =  pme                   
+rlist               =  1.5 	 ; rlist should be >= rcoulomb
+rcoulomb            =  1.4                 
+pme_order           =  4        ; GPU only supports 4
+fourierspacing      =  0.16                       
+rvdw                =  1.4      ;gromacs manual suggests 1.5 is better than 1.4 for good electrostatic calcs.
 
 
 ;; temperature coupling is on the same number of groups that you set in the index file
@@ -55,8 +57,9 @@ ref_t               =   300     300
 
 
 ;; Pressure coupling is on the same number of group
-Pcoupl              =  Berendsen   ; berendsen for equilibration
-tau_p               =  0.5         ; gromos paper says 0.5 but simulations fail with these values when pme and PR pressure coupling is used. gromacs user list suggests tau-t = 1 and tau_p=5 with v-rescale and c-rescale. longer tau_p suggested for parrinello-rahman. may need 5.0
+Pcoupl              =  parrinello-rahman   ; berendsen for equilibration
+tau_p               =  5.0         ; gromos paper says 0.5 but simulations fail with these values when pme and PR pressure coupling is used. gromacs user list suggests tau-t = 1 and tau_p=5 with v-rescale and c-rescale. longer tau_p suggested for parrinello-rahman. may need 5.0
+nstpcouple          =  10 ; must be a multiple of nstlist (defaults to 10)
 
 Pcoupltype          = semiisotropic
 compressibility     =  4.5e-5 4.5e-5
