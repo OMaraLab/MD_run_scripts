@@ -78,7 +78,7 @@ $GMXMDRUN -v -deffnm ${PBS_JOBNAME} -cpi ${PBS_JOBNAME}.cpt || errexit
 
 
 # Check the log file for the number of steps completed
-steps_done=$(awk '/Satistics over/ {print $3}' ${PBS_JOBNAME}.log | tail -1)
+steps_done=$(awk '/Statistics over/ {print $3}' ${PBS_JOBNAME}.log | tail -1)
 # Check the mdp file for the number of steps we want
 steps_wanted=$(awk '/nsteps *=/ {print $3}' ${PBS_JOBNAME}.mdp | tail -1)
 # Resubmit if we need to
