@@ -42,3 +42,28 @@ echo "Error function setup working"
 
 # === GROMPP and MDRUN ===
 # Add your GROMPP and MDRUN commands here!
+#
+## GROMPP if there's no TPR file (eg, this is the first submission)
+if [ ! -f ${SLURM_JOB_NAME}.tpr ]; then
+    $GMX grompp -f ${SLURM_JOB_NAME}.mdp -c ${SLURM_JOB_NAME}_start.gro -o ${SLURM_JOB_NAME}.tpr -p ${SLURM_JOB_NAME}.top  -n ${SLURM_JOB_NAME}.ndx -maxwarn 2 &> ${SLURM_JOB_NAME}_grompp_${SLURM_JOB_ID}.txt
+fi
+#####  RUN MD FOR 9.95 HOURS  #####
+
+$GMXMDRUN -v -deffnm ${SLURM_JOB_NAME} -cpi ${SLURM_JOB_NAME}.cpt || errexit
+
+#####  CHECK IF JOB IS DONE; IF NOT DONE RESUBMIT THIS SCRIPT  #####
+
+# Check the log file for the number of steps completed
+steps_done=$(awk '/Statistics over/ {print $3}' ${PBS_JOBNAME}.log | tail -1)
+# Check the mdp file for the number of steps we want
+steps_wanted=$(awk '/nsteps *=/ {print $3}' ${PBS_JOBNAME}.mdp | tail -1)
+# Resubmit if we need to
+if (( steps_done < steps_wanted )); then
+	echo "Job ${PBS_JOBID}: ${steps_done}/${steps_wanted} steps completed."
+	echo "Resubmitting job sequence..."
+	qsub $PBS_JOBNAME
+else
+	echo "Simulation Complete"
+fi
+
+#####  END  #####
