@@ -33,6 +33,7 @@ color change rgb 0   0.16   0.33   0.62    ;# blue
 color change rgb 2   0.25   0.25   0.23    ;# gray
 color change rgb 3   1.0    0.5    0.0     ;# orange
 color change rgb 4   1.0    0.73   0.0     ;# yellow
+color change rgb 5   0.876   0.847   0.779   ;# tan -> beige 
 #color change rgb 5   0.5    0.5    0.2     ;# tan
 #color change rgb 6   0.6    0.6    0.6     ;# silver
 color change rgb 7   0.0    0.9    0.04    ;# green
@@ -60,7 +61,14 @@ color change rgb 24  0.01   0.04   0.93    ;# blue3
 color change rgb 29  0.82   0.0    0.0     ;# red2
 color change rgb 30  1.0    0.1    0.2     ;# red3
 color change rgb 31  0.89   0.35   0.0     ;# orange2
-color change rgb 32  0.98   0.39   0.15    ;# orange3
+#color change rgb 32  0.98   0.39   0.15    ;# orange3
+color change rgb 32  0.98   0.632   0.204    ;# orange3 but much lighter
+
+
+color Chain A cyan3
+color Chain B orange3
+color Chain C lime
+color Chain X tan
 
 
 proc del_all_reps {{molid top}} {
@@ -71,9 +79,13 @@ proc del_all_reps {{molid top}} {
     }
 }
 
+color Display Background white 
+display projection orthographic
 display rendermode GLSL
 display depthcue off
+display ambientocclusion on
 
+# Coolwater is by Alex Schumann-Gillett 
 material add CoolWater
 material change ambient CoolWater 0.30
 material change diffuse CoolWater 0.50
@@ -81,15 +93,42 @@ material change specular CoolWater 0.87
 material change shininess CoolWater 0.85
 material change opacity CoolWater 0.11
 
+# Hardwater, Jellywater & DreamWater are by Ada Quinn
 
-#Try making a second coolwater that I can use as a transparent material that doesn't change the colour the way Glass does
 material add HardWater
 material change ambient HardWater 0.30
 material change diffuse HardWater 1.00
-material change specular HardWater 0.50
-material change shininess HardWater 0.80
-material change opacity HardWater 0.2
+material change specular HardWater 0.51
+material change shininess HardWater 0.82
+material change opacity HardWater 0.21
+material change mirror HardWater 0.00
+material change outline HardWater 0.00
+material change outlinewidth Hardwater 0.00
 material change transmode HardWater 1
+
+material add JellyWater
+# be careful with Jellywater, it is quite computationally intensive
+material change ambient JellyWater 0.60
+material change diffuse JellyWater 0.00
+material change specular JellyWater 0.00
+material change shininess JellyWater 1.00
+material change opacity JellyWater 0.4
+material change mirror JellyWater 0.00
+material change outline JellyWater 0.00
+material change outlinewidth JellyWater 0.00
+material change transmode JellyWater 0
+
+material add DreamWater
+material change ambient DreamWater 0.60
+material change diffuse DreamWater 1.00
+material change specular DreamWater 0.00
+material change shininess DreamWater 1.00
+material change opacity DreamWater 0.2
+material change mirror DreamWater 0.00
+material change outline DreamWater 0.00
+material change outlinewidth DreamWater 0.00
+material change transmode DreamWater 0
+
 
 # turn on lights 0 and 1
 light 0 on
@@ -118,9 +157,6 @@ menu main      on
 #menu render   on
 #menu files    on
 
-color Display Background white 
-display projection orthographic
-display rendermode GLSL
 
 # start the scene a-rockin'
 # rock y by 1
