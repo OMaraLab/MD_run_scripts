@@ -1,0 +1,45 @@
+title               =  molecular dynamics
+
+integrator          =  md
+dt                  =  0.004      		; ps ! ; for use with HMR
+nsteps              =  125000000     ; 500 ns
+nstcomm             =  100
+nstxout             =  0
+nstvout             =  0
+nstfout             =  0
+nstxtcout           =  125000
+nstlist             =  10
+ns_type             =  grid
+
+coulombtype         =  pme
+rlist               =  1.4
+rcoulomb            =  1.4
+pme_order           =  4
+fourierspacing      =  0.16
+rvdw                =  1.4
+
+; Berendsen temperature coupling is on in two groups
+Tcoupl              =  v-rescale 		; physically correct thermostat to rescale towards the Maxwell-Boltzmann distribution but not the theremostat GROMOS was paramaterised with.
+tau_t               =  3       3
+tc-grps             =  solvent solute
+ref_t               =   310       310
+
+;; Pressure coupling is on the same number of group
+Pcoupl              =  Parrinello-Rahman   	; berendsen for equilibration ; PR reproduces the correct ensemble of pressure but not the barostat GROMOS was parameterised with
+tau_p               =  40         		; I used tau_p = 20-60 as reasonable values for PR to prevent rapid and extreme pressure oscilations for if the membrane curves towards the periodic boundary, or if the system is not 100% at equilinrium. Still better at producing a physically correct pressure ensemble than Berendsen.
+
+Pcoupltype          = semiisotropic
+compressibility     =  4.5e-5 4.5e-5
+ref_p               =  1.0 1.0
+refcoord-scaling    = all       ;scaling of coordinates with the scaling matrix of the pressure coupling
+gen_vel             =  yes      ; intial boltzmann distribution of velocities for bonds, angles, etc
+gen_temp            =  310.0
+gen_seed            = -1
+
+; Type of constraint algorithm
+constraint-algorithm    = lincs
+
+constraints         =  all-bonds ; all-bonds is more stable with HMR and a 4 fs timestep, switch to h-bonds for a 2 fs time step as this is what GROMOS was paramaterised with.
+lincs-warnangle         = 90
+lincs-order             = 6
+lincs-iter              = 2

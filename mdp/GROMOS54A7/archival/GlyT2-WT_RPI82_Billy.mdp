@@ -1,0 +1,53 @@
+
+title               =  GlyT2
+constraints         =  h-bonds 
+define              =  -DHMR
+
+integrator          =  md
+dt                  =  0.004      ; ps !
+nsteps              =  125000000   ; 500 ns        
+nstcomm             =  500      ; the Gromos 54a7 paper uses 2ps, ie, 1000 steps. 
+
+;; trr file outputs
+nstxout             =  0         
+nstvout             =  0         
+nstfout             =  0         
+
+;; xtc file outputs
+nstxout-compressed  =  5000  ; this is 20ps
+
+
+nstlist             =  25   
+
+pbc             = xyz		; default for gromacs
+
+coulombtype         =  pme                   
+rlist               =  1.4 	 ; rlist should be >= rcoulomb
+rcoulomb            =  1.4                 
+pme_order           =  4        ; GPU only supports 4
+fourierspacing      =  0.16                       
+rvdw                =  1.4     
+
+
+Tcoupl              =  v-rescale
+tau_t               =  0.1   0.1
+tc-grps             =  solvent   solute  
+ref_t               =   310     310
+
+Pcoupl              =  parrinello-rahman   
+tau_p               =  60 
+
+Pcoupltype          = semiisotropic
+compressibility     =  4.5e-5 4.5e-5
+ref_p               =  1.0 1.0 
+refcoord-scaling    =  all       ;scaling of coordinates with the scaling matrix of the pressure coupling
+gen_vel             =  yes	; intial boltzmann distribution of velocities for bonds, angles, etc
+gen_temp            =  310.0
+gen_seed            =  -1
+
+
+;settings for LINCS
+constraint-algorithm     = lincs
+lincs-order = 6
+lincs-iter = 2
+lincs-warnangle = 30
