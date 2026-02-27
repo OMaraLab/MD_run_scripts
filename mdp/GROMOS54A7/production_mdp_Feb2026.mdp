@@ -1,5 +1,5 @@
-;; This is a mdp file from group github 2026_Feb,development throughout 2025 by the O'Mara group
-;; This .mdp is modified from the 2025_Dec Production .mdp as a joint effort by the O'Mara group
+;; This is an .mdp file from group github 2026_Feb, developed throughout 2025 by the O'Mara group
+;; This .mdp is modified from the 2025_Dec template .mdp as a joint effort by the O'Mara group
 
 title               =  MD simulation ;change to what you want
 constraints         =  h-bonds 
@@ -17,7 +17,7 @@ nstfout             =  0         ; this is used for trr files, no need to includ
 
 ;; xtc file outputs
 nstxout-compressed  =  50000                      
-; this is 100ps. default value in the Gromos 54a7 paper is 2ps, but the timescales were much shorter when that paper was published. more frequent output gives bigger files.
+; Number of steps in between writing to the .xtc file. More frequent output gives bigger files.
 
 
 verlet-buffer-tolerance = -1 ; set vbt to -1 so that nstlist can be manually changed
@@ -34,9 +34,9 @@ pbc             = xyz		; default for gromacs
 ;; electrostatics choose from PME or Reaction field. Gromos is parameterised for use with reaction field.
 ;; values for reaction field electrostatics in gromos 54a7
 ;coulombtype 	= reaction-field
-;rcoulomb	= 1.4           ;from gromos paper
-;rlist		= 1.4
-;rvdw 		= 1.4
+;rcoulomb	       = 1.4           ;from gromos paper
+;rlist		       = 1.4
+;rvdw 		       = 1.4
 ;epsilon-rf      = 61	        ; gromos paper uses 61. dielectric constant of water is 78.5
 
 ;; values for PME electrostatics 
@@ -70,13 +70,13 @@ gen_vel             =  yes	; intial Maxwell-Boltzmann distribution of velocities
 gen_temp            =  300.0
 gen_seed            =  -1
 
-;; Type of constraint algorithm
+;;Type of constraint algorithm
 ;;settings for LINCS
-constraint-algorithm     = lincs
-lincs-order = 4 
+constraint-algorithm      = lincs
+lincs-order               = 4 
 ;  Highest order in the expansion of the constraint coupling matrix. When constraints form triangles, an additional expansion of the same order is applied on top of the normal expansion only for the couplings within such triangles. For “normal” MD simulations an order of 4 usually suffices, 6 is needed for large time-steps with virtual sites.
 
-lincs-iter = 1
+lincs-iter                = 1
 ;Number of iterations to correct for rotational lengthening in LINCS. For normal runs a single step is sufficient, but for NVE runs where you want to conserve energy accurately or for accurate energy minimization in double precision you might want to increase it to 2. Note that in single precision using more than 1 iteration will often lead to worse accuracy due to amplification of rounding errors.
 
 ;lincs-warnangle = 30  ;(30) [deg] maximum angle that a bond can rotate before LINCS will complain
