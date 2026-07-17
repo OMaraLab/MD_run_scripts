@@ -3,7 +3,7 @@
 #SBATCH --ntasks=512 # This will vary based on your system size. 512 is based on a ~500,000 particle system
 #SBATCH --ntasks-per-node=64 # ntasks-per-node x cpus-per-task = 128
 #SBATCH --cpus-per-task=2 # must match OMP_NUM_THREADS - 2 OMP threads ideal for UA/AA systems based on 2024 benchmarking.
-#SBATCH --exclusive # Only necessary if you a
+##SBATCH --exclusive # Only necessary if you want to ensure no other jobs are on the node - THIS IS WASTEFUL, but sometimes increases speed significantly for coarse grained systems. NOT RECOMMENDED.
 #SBATCH --time=10:00:00
 #SBATCH -m block:block:block # At resource level - place 64 tasks and respective threads next to each other
 
